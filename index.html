@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FANZ CELL - Ultimate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <meta name="theme-color" content="#020617">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        :root { 
+            --bg: #020617; 
+            --card: rgba(30, 41, 59, 0.6); 
+            --accent: #22d3ee; 
+            --text: #f1f5f9; 
+            --grad: linear-gradient(135deg, #0ea5e9, #6366f1); 
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 120px; overflow-x: hidden; }
+        
+        header { background: rgba(15, 23, 42, 0.8); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        #header-jam { font-weight: 800; color: var(--accent); font-size: 14px; }
+        .header-icons { display: flex; gap: 15px; align-items: center; font-size: 18px; color: var(--text); }
+        .header-icons i { cursor: pointer; transition: color 0.3s; }
+        .header-icons i:hover { color: var(--accent); }
+
+        .section-title { font-size: 11px; font-weight: 800; margin: 20px 0 10px; color: var(--accent); text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 8px; }
+        .input-box { background: var(--card); padding: 15px; border-radius: 15px; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 8px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(34, 211, 238, 0.4); }
+        
+        .btn-cek { background: var(--grad); color: white; border: none; padding: 0 15px; border-radius: 10px; font-weight: 800; cursor: pointer; }
+
+        .pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .pay-card { background: var(--card); padding: 12px 5px; border-radius: 12px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: 0.3s; backdrop-filter: blur(12px); }
+        .pay-card:hover { transform: translateY(-2px); }
+        .pay-card.selected { border-color: var(--accent); background: rgba(34,211,238,0.1); box-shadow: 0 0 15px rgba(34, 211, 238, 0.3); }
+        .pay-card i { font-size: 18px; margin-bottom: 5px; color: var(--accent); }
+        .pay-card div { font-size: 10px; font-weight: 800; }
+        .fee-tag { font-size: 8px; opacity: 0.6; }
+
+        .nav-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .nav-grid::-webkit-scrollbar { display: none; }
+        .nav-box { background: var(--card); padding: 10px 20px; border-radius: 12px; font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(12px); }
+        .nav-box.active { background: var(--grad); color: white; border-color: rgba(255,255,255,0.2); box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
+        
+        #area-layanan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .layanan-item { background: var(--card); padding: 10px 5px; border-radius: 10px; text-align: center; font-size: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.2s; border: 1px solid rgba(255,255,255,0.05); }
+        .layanan-item.active { background: var(--grad); color: white; box-shadow: 0 0 10px rgba(14, 165, 233, 0.3); }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card { background: var(--card); padding: 12px; border-radius: 15px; text-align: center; cursor: pointer; border: 2px solid rgba(255,255,255,0.05); transition: 0.2s; backdrop-filter: blur(12px); }
+        .card.selected { border-color: var(--accent); background: rgba(34,211,238,0.1); transform: scale(1.02); box-shadow: 0 0 15px rgba(34, 211, 238, 0.3); }
+        .card .price { color: var(--accent); font-size: 11px; font-weight: 800; margin-top: 5px; }
+
+        /* CHATBOT */
+        #chat-btn { position: fixed; bottom: 85px; right: 20px; width: 55px; height: 55px; background: var(--grad); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 3000; box-shadow: 0 0 20px rgba(34, 211, 238, 0.5); cursor: pointer; transition: transform 0.3s; }
+        #chat-btn:hover { transform: scale(1.1); }
+        #chat-box { display: none; position: fixed; bottom: 155px; right: 20px; width: 320px; height: 450px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-radius: 20px; z-index: 4000; flex-direction: column; overflow: hidden; border: 1px solid var(--accent); box-shadow: 0 10px 40px rgba(0,0,0,0.8); animation: slideUp 0.3s ease; }
+        .chat-h { background: var(--grad); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+        .chat-b { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 12px; }
+        .chat-msg { padding: 10px 12px; border-radius: 12px; max-width: 85%; line-height: 1.4; }
+        .chat-msg.user { background: var(--grad); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-msg.bot { background: #1e293b; color: #f1f5f9; align-self: flex-start; border: 1px solid rgba(255,255,255,0.05); border-bottom-left-radius: 2px; }
+        
+        .footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); z-index: 2000; backdrop-filter: blur(15px); }
+
+        /* RUNNING TEXT */
+        .running-text { width:100%; overflow:hidden; background:rgba(34,211,238,0.1); border:1px solid rgba(34,211,238,0.3); border-radius:10px; margin-bottom:15px; }
+        .running-content { display:inline-block; white-space:nowrap; padding:8px 0; font-size:11px; font-weight:700; color:var(--accent); animation:scrollText 25s linear infinite; }
+        @keyframes scrollText { 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
+
+        /* MODAL */
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
+        .modal-box { background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(20px); padding:20px; width:90%; max-width:350px; border-radius:20px; border:1px solid var(--accent); box-shadow: 0 0 30px rgba(34, 211, 238, 0.2); animation: zoomIn 0.3s ease; }
+        .modal-btns { display:flex; gap:10px; margin-top:15px; }
+        .modal-btns button { flex:1; padding:10px; border-radius:10px; border:none; font-weight:800; cursor:pointer; }
+
+        /* RIWAYAT BOX */
+        .riwayat-box { background: var(--card); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; backdrop-filter: blur(12px); }
+        .riwayat-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .status-badge { font-size: 9px; font-weight: 800; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 3px 10px; border-radius: 6px; display: inline-block; margin-top: 5px; }
+        
+        /* GACHA CSS */
+        .gacha-btn { width: 100%; padding: 20px; background: linear-gradient(45deg, #f59e0b, #ef4444); color: white; border: none; border-radius: 15px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); transition: 0.3s; margin-top:15px; text-transform: uppercase; letter-spacing: 1px;}
+        .gacha-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(245, 158, 11, 0.6); }
+        .gacha-result { margin-top: 20px; padding: 15px; border-radius: 15px; text-align: center; font-size: 14px; font-weight: bold; display: none; border: 2px dashed #f59e0b; background: rgba(245, 158, 11, 0.1); color: #fcd34d; }
+        .calc-result { background: rgba(34, 211, 238, 0.1); border: 1px dashed var(--accent); padding: 15px; border-radius: 12px; text-align: center; margin-top: 15px; font-size: 13px; font-weight: 700; color: var(--text); }
+
+        /* MAINTENANCE */
+        #maint-box { display: none; background: var(--card); border-radius: 20px; padding: 20px; text-align: center; border: 2px solid #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); margin-bottom: 20px; animation: pulse-maint 2s infinite; }
+        @keyframes pulse-maint { 0% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); } 50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.6); } 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); } }
+        .maint-title { color: #ef4444; font-weight: 800; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .maint-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .maint-time-card { background: rgba(15, 23, 42, 0.8); padding: 15px 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .maint-val { font-size: 28px; font-weight: 800; color: white; font-family: monospace; }
+        .maint-lab { font-size: 9px; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
+        .maint-status { background: #ef4444; color: white; font-size: 11px; font-weight: 800; padding: 8px; border-radius: 10px; display: inline-block; }
+
+        /* ANIMATIONS */
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+
+<body>
+   <div id="auth-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.9); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(15px);">
+    <div style="width: 100%; max-width: 400px; background: rgba(30, 41, 59, 0.8); border-radius: 24px; padding: 30px; border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 0 40px rgba(34, 211, 238, 0.2);">
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="margin: 0; font-size: 28px; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 20px rgba(34, 211, 238, 0.5);">FANZ CELL</h1>
+            <p style="margin: 5px 0 0; font-size: 12px; color: #94a3b8;">Portal Top Up Termurah & Tercepat</p>
+        </div>
+
+        <div style="display: flex; background: #0f172a; padding: 5px; border-radius: 15px; margin-bottom: 25px;">
+            <div id="tab-login" onclick="switchAuth('login')" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 14px; transition: 0.3s; background: var(--grad); color: white;">LOGIN</div>
+            <div id="tab-register" onclick="switchAuth('register')" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 14px; transition: 0.3s; color: #94a3b8;">REGISTER</div>
+        </div>
+
+        <div id="form-login">
+            <input type="text" id="l-user" placeholder="Username" required>
+            <div style="position: relative; margin-bottom: 15px;">
+                <input type="password" id="l-pass" placeholder="Password" style="margin-bottom: 0;" required>
+                <i class="fas fa-eye" onclick="togglePass('l-pass', this)" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer;"></i>
+            </div>
+            <button onclick="handleLogin()" style="width: 100%; padding: 16px; background: var(--grad); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); transition: 0.3s;">MASUK SEKARANG</button>
+        </div>
+        
+        <div id="form-register" style="display: none;">
+            <input type="text" id="r-user" placeholder="Username (Min 4 Karakter)" required>
+            <input type="number" id="r-wa" placeholder="No WhatsApp Aktif (08xx)" required>
+            <div style="position: relative; margin-bottom: 15px;">
+                <input type="password" id="r-pass" placeholder="Buat Password (Min 6 Karakter)" style="margin-bottom: 0;" required>
+                <i class="fas fa-eye" onclick="togglePass('r-pass', this)" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer;"></i>
+            </div>
+            <div style="font-size: 11px; color: #94a3b8; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="r-terms" style="width: auto; margin: 0;" required>
+                <label for="r-terms">Saya setuju dengan Syarat & Ketentuan</label>
+            </div>
+            <button onclick="handleRegister()" style="width: 100%; padding: 16px; background: #10b981; border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);">DAFTAR AKUN BARU</button>
+        </div>
+    </div>
+</div>
+
+<div id="order-modal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="margin-top:0;color:var(--accent)"><i class="fas fa-shopping-cart"></i> Konfirmasi Pesanan</h3>
+
+    <div id="qr-container" style="display:none; text-align:center; margin-bottom:15px; background:white; padding:15px; border-radius:20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+        <p style="color:#0f172a; font-size:11px; font-weight:800; margin-top:0; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">PILIH QR⚡</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center;">
+            <div style="text-align:center; padding: 5px; border: 1px solid #e2e8f0; border-radius: 10px;">
+                <p style="color:#64748b; font-size:9px; font-weight:700; margin:0 0 5px 0;">UTAMA</p>
+                <img src="https://via.placeholder.com/130x130.png?text=QR+Utama" alt="QRIS 1" style="width:100%; max-width:130px; border-radius:8px;">
+            </div>
+            <div style="text-align:center; padding: 5px; border: 1px solid #e2e8f0; border-radius: 10px;">
+                <p style="color:#64748b; font-size:9px; font-weight:700; margin:0 0 5px 0;">CADANGAN</p>
+                <img src="https://via.placeholder.com/130x130.png?text=QR+Cadangan" alt="QRIS 2" style="width:100%; max-width:130px; border-radius:8px;">
+            </div>
+        </div>
+        <p style="color:#ef4444; font-size:10px; font-weight:800; margin-top:10px; margin-bottom:0; background:rgba(239,68,68,0.1); padding:5px; border-radius:5px;">⚠️ TF SESUAI NOMINAL! JANGAN KURANG/LEBIH ⚠️</p>
+    </div>
+
+    <div id="wallet-manual-container" style="display:none; margin-bottom:15px; background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; border:1px solid var(--accent);">
+        <p style="font-size:11px; margin-top:0; color:var(--accent); font-weight:700; text-align:center;">KLIK NOMOR UNTUK SALIN:</p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+            <button onclick="copyText('087819661875')" type="button" style="background:#22d3ee; color:black; border:none; padding:10px; border-radius:8px; font-size:10px; font-weight:bold; text-align:left; cursor:pointer;"><i class="fas fa-copy"></i> DANA 1: 0878 1966 1875 (faizzrizky56)</button>
+            <button onclick="copyText('087795237332')" type="button" style="background:#22d3ee; color:black; border:none; padding:10px; border-radius:8px; font-size:10px; font-weight:bold; text-align:left; cursor:pointer;"><i class="fas fa-copy"></i> DANA 2: 0877 9523 7332 (MarketFanzz)</button>
+            <button onclick="copyText('087795237332')" type="button" style="background:#22c55e; color:white; border:none; padding:10px; border-radius:8px; font-size:10px; font-weight:bold; text-align:left; cursor:pointer;"><i class="fas fa-copy"></i> GOPAY: 0877 9523 7332 (fanzzrizky)</button>
+            <button onclick="copyText('087819661875')" type="button" style="background:#f97316; color:white; border:none; padding:10px; border-radius:8px; font-size:10px; font-weight:bold; text-align:left; cursor:pointer;"><i class="fas fa-copy"></i> SHOPEEPAY: 0878 1966 1875 (market_fanz32)</button>
+        </div>
+    </div>
+
+    <div id="cash-options" style="display:none; margin-bottom:15px; background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; border:1px solid rgba(255,255,255,0.1);">
+        <p style="font-size:11px; margin-top:0; color:var(--accent); font-weight:700;">Pilih Nominal Pembayaran:</p>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:10px;">
+            <button onclick="setCashPas()" type="button" style="background:var(--accent); color:black; border:none; padding:8px; border-radius:8px; font-size:11px; font-weight:bold;">✨ UANG PAS</button>
+            <button onclick="setCash(10000)" style="background:var(--accent); color:black; border:none; padding:8px; border-radius:8px; font-size:11px; font-weight:bold;">Rp 10.000</button>
+            <button onclick="setCash(20000)" style="background:var(--accent); color:black; border:none; padding:8px; border-radius:8px; font-size:11px; font-weight:bold;">Rp 20.000</button>
+            <button onclick="setCash(50000)" style="background:var(--accent); color:black; border:none; padding:8px; border-radius:8px; font-size:11px; font-weight:bold;">Rp 50.000</button>
+        </div>
+        <input type="number" id="custom-cash" placeholder="Atau ketik nominal lain..." style="width:100%; font-size:12px;">
+    </div>
+
+    <div id="modal-detail" style="font-size:12px;line-height:1.6; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px;"></div>
+    <div class="modal-btns">
+      <button onclick="closeModal('order-modal')" style="background:#334155;color:white;">BATAL</button>
+      <button id="btn-confirm" onclick="confirmOrder()" style="background:var(--grad);color:white;">KONFIRMASI</button>
+    </div>
+  </div>
+</div>
+
+<div id="profile-modal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 style="margin-top:0; color:var(--accent); text-align:center;"><i class="fas fa-user-circle"></i> Profil Akun</h3>
+        <div style="background: rgba(15, 23, 42, 0.8); padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="width: 60px; height: 60px; background: var(--grad); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: white; box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);" id="prof-avatar">U</div>
+            <h2 id="prof-name" style="margin: 0 0 5px; font-size: 18px;">Username</h2>
+            <p id="prof-wa" style="margin: 0; color: #94a3b8; font-size: 12px;">08xxxxxxx</p>
+        </div>
+        <div style="display: flex; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+            <div>
+                <span style="font-size: 10px; color: #94a3b8;">Sisa Saldo</span>
+                <div style="font-size: 16px; font-weight: bold; color: #10b981;">Rp 0</div>
+            </div>
+            <div style="text-align: right;">
+                <span style="font-size: 10px; color: #94a3b8;">Total Transaksi</span>
+                <div id="prof-trx" style="font-size: 16px; font-weight: bold; color: var(--accent);">0</div>
+            </div>
+        </div>
+        <div class="modal-btns">
+            <button onclick="closeModal('profile-modal')" style="background:#334155;color:white;">TUTUP</button>
+            <button onclick="handleLogout()" style="background:#ef4444;color:white;"><i class="fas fa-sign-out-alt"></i> LOGOUT</button>
+        </div>
+    </div>
+</div>
+
+<header>
+    <div style="font-weight:800; font-size:1.2rem; text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);">FANZX <span style="color:var(--accent)">SHOP</span></div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <div style="text-align:right">
+            <div style="font-size: 9px; opacity: 0.6;" id="header-tgl"></div>
+            <div id="header-jam">00:00:00</div>
+        </div>
+        <div class="header-icons">
+            <i class="fas fa-bell" onclick="alert('Belum ada notifikasi baru untuk Kakak.')"></i>
+            <i class="fas fa-user-circle" onclick="openProfile()"></i>
+        </div>
+    </div>
+</header>
+
+<div class="container" style="padding: 15px;">
+    <div id="welcome" style="font-weight:700; margin-bottom:15px; font-size:15px">Welcome, <span id="user-display" style="color:var(--accent)">User</span>!</div>
+
+    <div class="running-text">
+        <div class="running-content">
+            Welcome to FANZ CELL, moga langganan ^_^ • Cobain fitur Kalkulator WR MLBB! • Mainkan Gacha Harian untuk Diskon Spesial! • Proses Cepat & Aman • AI Chatbot siap membantu!🔥
+        </div>
+    </div>
+    
+    <div class="section-title">✨ Menu Navigasi</div>
+    <div class="nav-grid">
+        <div class="nav-box active" onclick="pilihK('game', this)"><i class="fas fa-gamepad"></i> Top Up</div>
+        <div class="nav-box" onclick="pilihK('Voucher', this)"><i class="fas fa-ticket-alt"></i> Voucher</div>
+        <div class="nav-box" onclick="pilihK('pulsa', this)"><i class="fas fa-mobile-alt"></i> Pulsa / Data</div>
+        <div class="nav-box" onclick="pilihK('wallet', this)"><i class="fas fa-wallet"></i> E-WALLET</div>
+        
+        <!-- Menu Cek Pesanan dan FAQ -->
+        <div class="nav-box" onclick="pilihK('kalkulator', this)" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981;"><i class="fas fa-calculator"></i> Kalkulator WR</div>
+        <div class="nav-box" onclick="pilihK('spin', this)" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #f59e0b;"><i class="fas fa-gift"></i> Gacha Promo</div>
+    </div>
+
+    <!-- MAIN ORDER SECTION -->
+    <div id="section-main-order">
+        <div id="maint-box">
+            <div class="maint-title"><i class="fas fa-tools"></i> MAINTENANCE BERLANGSUNG</div>
+            <div class="maint-grid">
+                <div class="maint-time-card"><div id="m-jam" class="maint-val">00</div><div class="maint-lab">Jam</div></div>
+                <div class="maint-time-card"><div id="m-menit" class="maint-val">00</div><div class="maint-lab">Menit</div></div>
+                <div class="maint-time-card"><div id="m-detik" class="maint-val">00</div><div class="maint-lab">Detik</div></div>
+            </div>
+            <div id="m-selesai" class="maint-status">Selesai pada: 00:00:00</div>
+        </div>
+
+        <div class="section-title">1. Tujuan</div>
+        <div class="input-box">
+            <input type="text" id="target" placeholder="Masukkan ID / No HP tujuan...">
+            <div style="display:flex; gap:8px">
+                <input type="text" id="promo" placeholder="Kode Promo" style="margin:0">
+                <button class="btn-cek" onclick="cekPromo()">CEK</button>
+            </div>
+            <div id="promo-msg" style="font-size:10px; margin-top:5px; font-weight:700"></div>
+        </div>
+
+        <div class="section-title">2. Payment</div>
+        <div class="pay-grid">
+            <div class="pay-card" onclick="setPay('ALL PAYMENT', 300, this)"><i class="fas fa-wallet"></i><div>ALL PAYMENT</div><span class="fee-tag">+300</span></div>
+            <div class="pay-card" onclick="setPay('QRIS', 800, this)"><i class="fas fa-qrcode"></i><div>QRIS</div><span class="fee-tag">+800</span></div>
+            <div class="pay-card" onclick="setPay('CASH', 1500, this)"><i class="fas fa-money-bill-wave"></i><div>CASH</div><span class="fee-tag">+1,5rb</span></div>
+        </div>
+
+        <div id="main-catalog">
+            <div class="section-title">3. Select Service</div>
+            <div id="area-layanan"></div>
+
+            <div class="section-title">4. Select Provider</div>
+            <div id="area-nominal" class="grid"></div>
+        </div>
+    </div>
+
+    <!-- KALKULATOR WR -->
+    <div id="section-kalkulator" style="display:none; margin-top:20px;">
+        <div class="section-title" style="color:#10b981; border-left-color:#10b981;"><i class="fas fa-calculator"></i> Kalkulator WR Mobile Legends</div>
+        <div class="input-box" style="border: 1px solid rgba(16, 185, 129, 0.5); box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);">
+            <p style="font-size:11px; color:#94a3b8; margin-bottom:15px; margin-top:0;">Hitung berapa match yang harus Kakak menangin tanpa kalah untuk mencapai Win Rate yang diinginkan!</p>
+            
+            <label style="font-size: 10px; font-weight:bold; color: #10b981;">Total Pertandingan (Match)</label>
+            <input type="number" id="calc-match" placeholder="Misal: 350" style="margin-bottom: 12px;">
+            
+            <label style="font-size: 10px; font-weight:bold; color: #10b981;">Total Win Rate Saat Ini (%)</label>
+            <input type="number" id="calc-wr-now" placeholder="Misal: 55.5" style="margin-bottom: 12px;" step="0.1">
+            
+            <label style="font-size: 10px; font-weight:bold; color: #10b981;">Target Win Rate (%)</label>
+            <input type="number" id="calc-wr-target" placeholder="Misal: 70" style="margin-bottom: 15px;" step="0.1">
+            
+            <button onclick="hitungWR()" style="width:100%; padding:14px; background:#10b981; color:#020617; border:none; border-radius:12px; font-weight:800; cursor:pointer; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);"><i class="fas fa-bolt"></i> HITUNG</button>
+            
+            <div id="calc-result" class="calc-result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- GACHA PROMO -->
+    <div id="section-spin" style="display:none; margin-top:20px;">
+        <div class="section-title" style="color:#f59e0b; border-left-color:#f59e0b;"><i class="fas fa-gift"></i> Daily Gacha Reward</div>
+        <div class="input-box" style="border: 1px solid rgba(245, 158, 11, 0.5); text-align: center; box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);">
+            <img src="https://cdn3d.iconscout.com/3d/premium/thumb/gift-box-5364132-4484081.png" alt="Gift" style="width: 120px; margin-bottom: 10px; filter: drop-shadow(0 10px 15px rgba(245,158,11,0.5));">
+            <h3 style="margin:0 0 10px; color:#f59e0b;">Coba Keberuntunganmu!</h3>
+            <p style="font-size:11px; color:#94a3b8; margin-bottom:15px; margin-top:0;">Gacha 1x/hari untuk dapat kode diskon spesial atau saldo gratis.</p>
+            
+            <button id="btn-gacha" onclick="putarGacha()" class="gacha-btn"><i class="fas fa-sync-alt"></i> SPIN</button>
+            
+            <div id="gacha-result" class="gacha-result"></div>
+        </div>
+    </div>
+
+    <!-- 1. KOLOM CEK PESANAN (Tampil di Dashboard Bawah) -->
+    <div id="section-cek-pesanan" class="riwayat-box" style="margin-top:30px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <span style="font-size: 11px; font-weight: 800; color:var(--accent);"><i class="fas fa-search"></i> CEK STATUS PESANAN</span>
+        </div>
+        <p style="font-size:10px; color:#94a3b8; margin-top:0; margin-bottom:15px;">Masukkan ID Transaksi atau Nomor HP yang digunakan untuk melacak pesanan.</p>
+        <div style="display:flex; gap:8px;">
+            <input type="text" id="input-cek-order" placeholder="ID / No HP..." style="margin:0; font-size:11px; padding:10px;">
+            <button class="btn-cek" onclick="cekPesanan()" style="padding:0 15px; font-size:11px;"><i class="fas fa-search"></i> LACAK</button>
+        </div>
+        <div id="hasil-cek-order" style="margin-top:15px; font-size:11px; display:none; padding:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:10px;"></div>
+    </div>
+
+    <!-- 2. KOLOM RIWAYAT PESANAN -->
+    <div id="riwayat-container" class="riwayat-box" style="margin-top: 15px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <span style="font-size: 11px; font-weight: 800; color:#22d3ee;"><i class="fas fa-history"></i> RIWAYAT TERAKHIR</span>
+            <span style="font-size: 10px; color: #ef4444; cursor: pointer; font-weight:bold; background: rgba(239,68,68,0.1); padding: 4px 8px; border-radius: 5px;" onclick="hapusRiwayat()">HAPUS</span>
+        </div>
+        <div id="list-riwayat">
+            <div style="text-align: center; opacity: 0.5; font-size: 10px; padding: 10px;">Belum ada pesanan</div>
+        </div>
+    </div>
+
+    <!-- 3. KOLOM FAQ & BANTUAN -->
+    <div id="section-faq" class="riwayat-box" style="margin-top:15px;">
+        <div style="display:flex; align-items:center; margin-bottom:15px;">
+            <span style="font-size: 11px; font-weight: 800; color:#3b82f6;"><i class="fas fa-info-circle"></i> FAQ & BANTUAN</span>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; justify-content: center; text-align: center;">
+                <i class="fas fa-headset" style="font-size: 24px; color: #60a5fa; margin-bottom: 8px;"></i>
+                <h4 style="margin: 0 0 5px; color: #60a5fa; font-size: 11px;">Butuh Bantuan?</h4>
+                <p style="font-size: 9px; color: #cbd5e1; margin-top: 0; margin-bottom: 12px;">Hubungi Admin jika ada pertanyaan atau kendala transaksi.</p>
+                <button onclick="window.open('https://wa.me/6287819661875', '_blank')" style="width:100%; padding:8px; background:#3b82f6; border:none; border-radius:8px; color:white; font-weight:800; cursor:pointer; font-size:9px; box-shadow: 0 4px 10px rgba(59,130,246,0.3);"><i class="fab fa-whatsapp"></i> HUBUNGI ADMIN</button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 8px 10px; border-radius: 8px;">
+                    <b style="font-size:10px; color:#60a5fa;">Q: Berapa lama proses pesanan?</b>
+                    <div style="font-size:9px; margin-top:3px; color:#cbd5e1;">A: Biasanya diproses otomatis dalam waktu 1-5 menit.</div>
+                </div>
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 8px 10px; border-radius: 8px;">
+                    <b style="font-size:10px; color:#60a5fa;">Q: Bagaimana jika salah input ID?</b>
+                    <div style="font-size:9px; margin-top:3px; color:#cbd5e1;">A: Tidak bisa di-refund. Mohon teliti kembali sebelum memesan.</div>
+                </div>
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 8px 10px; border-radius: 8px;">
+                    <b style="font-size:10px; color:#60a5fa;">Q: Pilihan cara bayar?</b>
+                    <div style="font-size:9px; margin-top:3px; color:#cbd5e1;">A: Mendukung QRIS, Semua E-WALLET, atau Cash (Uang Pas).</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="chat-btn" onclick="toggleChat()"><i class="fas fa-robot" style="color:white; font-size:24px;"></i></div>
+<div id="chat-box">
+    <div class="chat-h">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <i class="fas fa-robot" style="font-size: 20px;"></i>
+            <div>
+                <div style="font-size: 14px;">AI Assistant</div>
+                <div style="font-size: 9px; color: #4ade80; font-weight: normal;">• Online</div>
+            </div>
+        </div>
+        <i class="fas fa-times" onclick="toggleChat()" style="cursor:pointer; font-size: 18px;"></i>
+    </div>
+    <div class="chat-b" id="chat-content">
+        </div>
+    <div style="padding:15px; display:flex; gap:8px; background:rgba(15, 23, 42, 0.9); border-top: 1px solid rgba(255,255,255,0.05);">
+        <input type="text" id="chat-in" placeholder="Tanya apa aja Kak..." style="margin:0; font-size:12px; flex:1; border-radius: 20px; padding: 10px 15px;" onkeypress="if(event.key==='Enter') sendChat()">
+        <button onclick="sendChat()" style="background:var(--grad); border:none; border-radius:50%; width: 40px; height: 40px; color:white; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<div class="footer-bar">
+    <div>
+        <span style="font-size:9px; opacity:0.6; font-weight:bold; letter-spacing: 1px;">TOTAL</span>
+        <div id="total-txt" style="font-size:20px; font-weight:800; color:var(--accent); text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);">Rp 0</div>
+    </div>
+    <button onclick="orderNow()" style="background:var(--grad); color:white; border:none; padding:12px 30px; border-radius:12px; font-weight:800; cursor:pointer; font-size: 14px; box-shadow: 0 4px 15px rgba(34,211,238,0.3);">ORDER</button>
+</div>
+
+<script>
+// --- KONFIGURASI PROMO SESUAI DATABASE ---
+const promoBiasa = [
+    { code: "FANZX66", disc: 0.01 }, { code: "FANZX78", disc: 0.02 },
+    { code: "FANZX19", disc: 0.03 }, { code: "FANZX18", disc: 0.04 }, { code: "FANZX75", disc: 0.05 }
+];
+const promoPremium = [
+    { code: "FANZX77", disc: 0.06 }, { code: "FANZX95", disc: 0.07 },
+    { code: "FANZX23", disc: 0.08 }, { code: "FANZX73", disc: 0.09 }, { code: "FANZX32", disc: 0.10 }
+];
+const promoPrioritas = [
+    { code: "FANZX85", disc: 0.11 }, { code: "FANZX58", disc: 0.12 },
+    { code: "FANZX98", disc: 0.13 }, { code: "FANZX52", disc: 0.14 }, { code: "FANZX79", disc: 0.15 }
+];
+
+const allPromos = [...promoBiasa, ...promoPremium, ...promoPrioritas];
+
+const DB = {
+    game: {
+        ml:[["5 Diamond",1000],["12 Diamond",3500],["28 Diamond",8000],["36 Diamond",10000],["56 Diamond",15000],["85 Diamond",22500],["100 Diamond",26000],["144 Diamond",38000],["170 Diamond",45500],["240 Diamond",63000],["355 Diamond",93000],["425 Diamond",112000],["514 Diamond",132000],["712 Diamond",183000],["875 Diamond",217000],["1050 Diamond",265500],["1220 Diamond",309000],["1453 Diamond",371000],["1750 Diamond",441000],["2180 Diamond",524000],["2578 Diamond",625000],["4020 Diamond",961000],["7660 Diamond",1839000],["Weekly Diamond Pass",29500],["Twilight Pass",146500],["Starlight Mem Plus",195500]],
+        ff:[["5 Diamond",500],["12 Diamond",1000],["20 Diamond",3000],["30 Diamond",4000],["50 Diamond",6000],["70 Diamond",9000],["100 Diamond",13000],["140 Diamond",18000],["150 Diamond",21000],["210 Diamond",27000],["355 Diamond",48000],["425 Diamond",56000],["500 Diamond",68000],["720 Diamond",95000],["860 Diamond",112000],["1000 Diamond",135000],["1075 Diamond",145000],["1440 Diamond",190000],["1450 Diamond",192000],["2000 Diamond",260000],["2180 Diamond",285000],["3640 Diamond",470000],["7290 Diamond",930000],["Membership Mingguan",27000],["Membership Bulanan",81000],["BP Card",41500]],
+        pubg:[["35 UC",15500],["50 UC",24000],["70 UC",27500],["100 UC",29500],["150 UC",45500],["210 UC",59500],["250 UC",73000],["300 UC",75500],["375 UC",91000],["500 UC",122500],["525 UC",135500],["700 UC",158000],["750 UC",173500],["1000 UC",230500],["1250 UC",350500],["1750 UC",361500],["2500 UC",509000]],
+        cod:[["26 + 5 CP",5500],["53 + 9 CP",10000],["106 + 21 CP",20000],["264 + 53 CP",45500],["528 + 106 CP",94000],["1056 + 317 CP",178500],["1584 + 475 CP",211500]],
+        genshin:[["60 Crystals",12500],["300 + 30 Crystals",59500],["980 + 110 Crystals",179000],["1980 + 260 Crystals",387500],["3280 + 600 Crystals",615500]],
+        aov:[["40 AOV",10500],["90 AOV",19500],["230 AOV",47500],["470 AOV",93500],["950 AOV",187500],["1430 AOV",184000],["2390 AOV",473500]],
+        higgs:[["1B Chip",15000],["2B Chip",30000]]
+    },
+    Voucher: {
+       Googleplay:[["10.000",12000],["20.000",22000],["50.000",53000],["100.000",105000],["300.000",315000]],
+       roblox:[["Gift Card IDR 50.000",52000],["Gift Card IDR 100.000",102000],["Gift Card IDR 200.000",205000]],
+       spotify:[["1 Bulan Individual",55000],["3 Bulan Individual",165000]],
+       netflix:[["Mobile 1 Bulan",54000],["Basic 1 Bulan",65000],["Standard 1 Bulan",120000],["Premium 1 Bulan",186000]],
+       steam:[["Steam Wallet IDR 12.000",15000],["Steam Wallet IDR 45.000",50000],["Steam Wallet IDR 90.000",99000]]
+    },
+    pulsa: {
+        telkomsel:[["5.000",6500],["10.000",11000],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31500],["40.000",41000],["50.000",51500],["60.000",61500],["70.000",71500],["80.000",81500],["100.000",102000],["150.000",152000],["200.000",202000]],
+        xl:[["5.000",6000],["10.000",11000],["15.000",16000],["25.000",26000],["30.000",31000],["40.000",41000],["50.000",51500],["70.000",71500],["80.000",81500],["100.000",102000],["150.000",152000],["200.000",202000]],
+        axis:[["5.000",6000],["10.000",11000],["15.000",16000],["25.000",26500],["30.000",31500],["40.000",41500],["50.000",51500],["100.000",101000],["150.000",151500],["200.000",202000]],
+        indosat:[["5.000",6500],["10.000",11500],["15.000",16500],["20.000",21500],["25.000",25500],["30.000",31500],["40.000",41500],["50.000",51500],["70.000",71500],["80.000",81500],["90.000",91500],["100.000",102000]],
+        tri:[["5.000",6500],["10.000",11500],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31500],["40.000",41500],["50.000",51000],["70.000",71500],["90.000",91500],["100.000",102000],["125.000",127000],["150.000",152000],["200.000",202000]],
+        "by.u":[["3.000",4000],["4.000",5000],["5.000",6000],["10.000",11000],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31000],["35.000",36000],["40.000",41000],["45.000",46000],["50.000",51000],["55.000",56000],["60.000",61500],["70.000",71500],["80.000",81500],["90.000",91500],["100.000",101500],["150.000",152000],["200.000",202000]]
+    },
+    wallet: {
+        dana:[["1.000",1500],["2.000",2500],["3.000",3500],["4.000",4500],["5.000",5500],["10.000",11000],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31000],["40.000",41000],["50.000",52000],["60.000",62000],["70.000",72000],["80K",82500],["90K",92500],["100.000",103000],["125.000",128000],["150.000",153000],["200.000",203000]],
+        ovo:[["10.000",11000],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31000],["35.000",36000],["40.000",41000],["45.000",46000],["50.000",51500],["55.000",56500],["60.000",61500],["65.000",66500],["70.000",71500],["75.000",76500],["80.000",81500],["85.000",86500],["90.000",91500],["95.000",96500],["100.000",102500],["125.000",127500],["150.000",152500],["200.000",202500]],
+        gopay:[["1.000",1500],["2.000",2500],["3.000",3500],["4.000",4500],["5.000",5500],["10.000",11500],["15.000",16500],["20.000",21500],["25.000",26500],["30.000",31500],["40.000",41500],["50.000",51500],["60.000",61500],["70.000",71500],["80.000",82000],["90.000",92000],["100.000",102000],["125.000",127000],["150.000",152000],["200.000",202000]],
+        shopeepay:[["10.000",11500],["15.000",16500],["20.000",21500],["25.000",26500],["30.000",31500],["40.000",41500],["50.000",51500],["60.000",61500],["70.000",71500],["80.000",81500],["90.000",91500],["100.000",102500],["125.000",127500],["150.000",152500],["200.000",202000]],
+        Linkaja:[["10.000",11500],["15.000",16500],["20.000",21500],["25.000",26500],["30.000",31500],["35.000",36500],["40.000",41500],["45.000",46500],["50.000",51500],["55.000",56500],["60.000",61500],["65.000",66500],["70.000",71500],["80.000",81500],["90.000",91500],["100.000",101500],["125.000",126500]]
+      }
+  };
+
+let price = 0, fee = 0, game = "", item = "", pay = "", disc = 1;
+
+// --- AUTH SYSTEM ---
+function checkLogin() {
+    const activeUser = localStorage.getItem('mf_logged_in');
+    if (activeUser) {
+        document.getElementById('auth-overlay').style.display = 'none';
+        document.getElementById('user-display').innerText = activeUser;
+        injectWelcomeAI(activeUser);
+        muatRiwayat();
+    } else {
+        document.getElementById('auth-overlay').style.display = 'flex';
+    }
+}
+
+function switchAuth(type) {
+    const tLog = document.getElementById('tab-login');
+    const tReg = document.getElementById('tab-register');
+    const fLog = document.getElementById('form-login');
+    const fReg = document.getElementById('form-register');
+    
+    if (type === 'login') {
+        tLog.style.background = 'var(--grad)'; tLog.style.color = 'white';
+        tReg.style.background = 'transparent'; tReg.style.color = '#94a3b8';
+        fLog.style.display = 'block'; fReg.style.display = 'none';
+    } else {
+        tReg.style.background = 'var(--grad)'; tReg.style.color = 'white';
+        tLog.style.background = 'transparent'; tLog.style.color = '#94a3b8';
+        fReg.style.display = 'block'; fLog.style.display = 'none';
+    }
+}
+
+function togglePass(id, icon) {
+    const el = document.getElementById(id);
+    if (el.type === 'password') {
+        el.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        el.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+
+function handleRegister() {
+    const user = document.getElementById('r-user').value.trim();
+    const wa = document.getElementById('r-wa').value.trim();
+    const pass = document.getElementById('r-pass').value;
+    const terms = document.getElementById('r-terms').checked;
+
+    if (!user || !wa || !pass) return alert('Semua kolom wajib diisi!');
+    if (user.length < 4) return alert('Username minimal 4 karakter!');
+    if (pass.length < 6) return alert('Password minimal 6 karakter!');
+    if (!terms) return alert('Anda harus menyetujui Syarat & Ketentuan!');
+
+    let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
+    if (users[user]) return alert('Username sudah terdaftar! Silakan pilih yang lain.');
+
+    users[user] = { wa: wa, pass: pass, saldo: 0, trx: 0 };
+    localStorage.setItem('mf_users', JSON.stringify(users));
+    
+    alert('Pendaftaran berhasil! Silakan login.');
+    switchAuth('login');
+}
+
+function handleLogin() {
+    const user = document.getElementById('l-user').value.trim();
+    const pass = document.getElementById('l-pass').value;
+
+    let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
+    if (users[user] && users[user].pass === pass) {
+        localStorage.setItem('mf_logged_in', user);
+        checkLogin();
+    } else {
+        alert('Username atau Password salah!');
+    }
+}
+
+function handleLogout() {
+    localStorage.removeItem('mf_logged_in');
+    closeModal('profile-modal');
+    location.reload();
+}
+
+function openProfile() {
+    const activeUser = localStorage.getItem('mf_logged_in');
+    if (!activeUser) return;
+    let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
+    let uData = users[activeUser];
+
+    document.getElementById('prof-avatar').innerText = activeUser.charAt(0).toUpperCase();
+    document.getElementById('prof-name').innerText = activeUser;
+    document.getElementById('prof-wa').innerText = uData.wa;
+    document.getElementById('prof-trx').innerText = uData.trx || 0;
+    
+    document.getElementById('profile-modal').style.display = 'flex';
+}
+
+// --- NAV & LAYOUT SYSTEM ---
+function pilihK(k, el) {
+    document.querySelectorAll('.nav-box').forEach(b => {
+        b.classList.remove('active');
+        b.style.borderColor = 'rgba(255,255,255,0.05)';
+        b.style.boxShadow = 'none';
+        if(b.innerHTML.includes('Kalkulator')) { b.style.background='rgba(16, 185, 129, 0.2)'; b.style.color='#10b981'; b.style.borderColor='#10b981'; }
+        if(b.innerHTML.includes('Gacha')) { b.style.background='rgba(245, 158, 11, 0.2)'; b.style.color='#f59e0b'; b.style.borderColor='#f59e0b'; }
+    });
+    el.classList.add('active');
+    el.style.boxShadow = '0 0 15px rgba(14, 165, 233, 0.4)';
+    
+    if(k === 'kalkulator' || k === 'spin') {
+        el.style.background = 'var(--grad)'; el.style.color = 'white'; el.style.borderColor = 'rgba(255,255,255,0.2)';
+    }
+
+    document.getElementById('section-main-order').style.display = 'none';
+    document.getElementById('main-catalog').style.display = 'none';
+    document.getElementById('section-kalkulator').style.display = 'none';
+    document.getElementById('section-spin').style.display = 'none';
+    document.getElementById('section-cek-pesanan').style.display = 'none';
+    document.getElementById('riwayat-container').style.display = 'none';
+    document.getElementById('section-faq').style.display = 'none';
+
+    if (k === 'kalkulator') {
+        document.getElementById('section-kalkulator').style.display = 'block';
+    } else if (k === 'spin') {
+        document.getElementById('section-spin').style.display = 'block';
+    } else {
+        document.getElementById('section-main-order').style.display = 'block';
+        document.getElementById('main-catalog').style.display = 'block';
+        document.getElementById('section-cek-pesanan').style.display = 'block';
+        document.getElementById('riwayat-container').style.display = 'block';
+        document.getElementById('section-faq').style.display = 'block';
+        
+        let h = "";
+        if(DB[k]) {
+            Object.keys(DB[k]).forEach((l, i) => {
+                h += `<div class="layanan-item ${i===0?'active':''}" onclick="setPilih(this, '${k}', '${l}')">${l.toUpperCase()}</div>`;
+            });
+            document.getElementById('area-layanan').innerHTML = h;
+            setPilih(document.querySelector('.layanan-item'), k, Object.keys(DB[k])[0]);
+        }
+    }
+}
+
+function setPilih(el, c, l) {
+    document.querySelectorAll('.layanan-item').forEach(b => { 
+        b.classList.remove('active'); 
+        b.style.boxShadow = 'none'; 
+    });
+    el.classList.add('active'); 
+    el.style.boxShadow = '0 0 10px rgba(14, 165, 233, 0.3)';
+    game = l.toUpperCase();
+    
+    let h = "";
+    DB[c][l].forEach(d => {
+        h += `<div class="card" onclick="setItem('${d[0]}', ${d[1]}, this)">
+                <div style="font-size:11px; font-weight:800">${d[0]}</div>
+                <div class="price">Rp ${d[1].toLocaleString('id-ID')}</div>
+              </div>`;
+    });
+    document.getElementById('area-nominal').innerHTML = h;
+}
+
+function setItem(n, p, el) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected'); item = n; price = p; hitung();
+}
+
+function setPay(n, f, el) {
+    document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected'); pay = n; fee = f; hitung();
+}
+
+function setCashPas() {
+    const total = (price * disc) + fee;
+    document.getElementById('custom-cash').value = total;
+}
+
+function setCash(nominal) {
+    document.getElementById('custom-cash').value = nominal;
+}
+
+function hitung() {
+    let t = (price * disc) + fee;
+    document.getElementById('total-txt').innerText = t > 0 ? "Rp " + t.toLocaleString('id-ID') : "Rp 0";
+}
+
+// --- ORDER & PAYMENT LOGIC ---
+function orderNow() {
+    const tgt = document.getElementById('target').value;
+    if(!tgt) return alert('Tujuan belum diisi!');
+    if(!item || !pay) return alert('Pilih nominal dan payment!');
+
+    const total = (price * disc) + fee;
+    const qrContainer = document.getElementById('qr-container');
+    const wmContainer = document.getElementById('wallet-manual-container');
+    const coContainer = document.getElementById('cash-options');
+    
+    qrContainer.style.display = 'none';
+    wmContainer.style.display = 'none';
+    coContainer.style.display = 'none';
+
+    if (pay === 'QRIS') qrContainer.style.display = 'block';
+    if (pay === 'ALL PAYMENT') wmContainer.style.display = 'block';
+    if (pay === 'CASH') coContainer.style.display = 'block';
+
+    let det = `
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;">
+            <span style="color:#94a3b8;">Layanan:</span> <strong style="color:white; text-align:right;">${game}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;">
+            <span style="color:#94a3b8;">Target:</span> <strong style="color:white; text-align:right;">${tgt}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;">
+            <span style="color:#94a3b8;">Item:</span> <strong style="color:white; text-align:right;">${item}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;">
+            <span style="color:#94a3b8;">Payment:</span> <strong style="color:white; text-align:right;">${pay}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; background:rgba(34,211,238,0.1); padding:10px; border-radius:8px; box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);">
+            <span style="color:#22d3ee; font-weight:800;">Total Bayar:</span> <strong style="color:#22d3ee; font-size:16px;">Rp ${total.toLocaleString('id-ID')}</strong>
+        </div>
+    `;
+    
+    document.getElementById('modal-detail').innerHTML = det;
+    document.getElementById('order-modal').style.display = 'flex';
+}
+
+function confirmOrder() {
+    let t = (price * disc) + fee;
+    if (pay === 'CASH') {
+        const cashBayar = parseInt(document.getElementById('custom-cash').value);
+        if (!cashBayar || cashBayar < t) {
+            alert('Nominal uang pas/cash kurang dari total bayar!');
+            return;
+        }
+    }
+
+    const tgt = document.getElementById('target').value;
+    const inv = "INV-" + Math.floor(Math.random() * 900000 + 100000);
+    const date = new Date().toLocaleString('id-ID');
+
+    simpanRiwayat(inv, game, item, t, date, pay, tgt);
+
+    const activeUser = localStorage.getItem('mf_logged_in');
+    let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
+    if (users[activeUser]) {
+        users[activeUser].trx = (users[activeUser].trx || 0) + 1;
+        localStorage.setItem('mf_users', JSON.stringify(users));
+    }
+
+    let msg = `*NEW ORDER ${inv}*\n\nGame: ${game}\nID: ${tgt}\nItem: ${item}\nPayment: ${pay}\nTotal: Rp ${t.toLocaleString('id-ID')}\n\nSegera proses ngab!`;
+    window.open("https://wa.me/6287819661875?text=" + encodeURIComponent(msg));
+    
+    closeModal('order-modal');
+    muatRiwayat();
+    document.getElementById('target').value = '';
+    
+    setTimeout(() => {
+        let aiResp = `Pesanan kamu dengan Invoice *${inv}* untuk *${item} ${game}* telah masuk antrean. Tunggu 1-5 menit ya Kak!`;
+        addChat(aiResp, 'bot');
+        if(document.getElementById('chat-box').style.display !== 'flex') toggleChat();
+    }, 2000);
+}
+
+function cekPromo() {
+    const p = document.getElementById('promo').value.toUpperCase();
+    const msg = document.getElementById('promo-msg');
+    
+    const foundPromo = allPromos.find(promo => promo.code === p);
+    
+    if (foundPromo) {
+        disc = 1 - foundPromo.disc; 
+        msg.innerText = `✅ Promo Diskon ${foundPromo.disc * 100}% Berhasil Digunakan!`; 
+        msg.style.color = '#10b981';
+    } else {
+        disc = 1; 
+        msg.innerText = "❌ Kode Promo Tidak Valid / Kadaluarsa"; 
+        msg.style.color = '#ef4444';
+    }
+    hitung();
+}
+
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Nomor " + text + " berhasil disalin!");
+    }).catch(err => {
+        console.error('Gagal menyalin text: ', err);
+    });
+}
+
+// --- KALKULATOR WR ---
+function hitungWR() {
+    let tMatch = parseFloat(document.getElementById("calc-match").value);
+    let tWr = parseFloat(document.getElementById("calc-wr-now").value);
+    let wrReq = parseFloat(document.getElementById("calc-wr-target").value);
+    let resultBox = document.getElementById("calc-result");
+    
+    if (isNaN(tMatch) || isNaN(tWr) || isNaN(wrReq)) {
+        resultBox.style.display = 'block';
+        resultBox.style.color = '#ef4444';
+        resultBox.style.borderColor = '#ef4444';
+        resultBox.innerHTML = "❌ Harap isi semua kolom dengan angka yang benar!";
+        return;
+    }
+    
+    if(wrReq >= 100 || wrReq <= tWr) {
+        resultBox.style.display = 'block';
+        resultBox.style.color = '#ef4444';
+        resultBox.style.borderColor = '#ef4444';
+        resultBox.innerHTML = "❌ Target WR harus kurang dari 100% dan lebih besar dari WR saat ini!";
+        return;
+    }
+
+    let tWin = tMatch * (tWr / 100);
+    let minMatch = Math.ceil((100 * tWin - tMatch * wrReq) / (wrReq - 100));
+
+    resultBox.style.display = 'block';
+    resultBox.style.color = '#10b981';
+    resultBox.style.borderColor = '#10b981';
+    resultBox.innerHTML = `Kamu butuh sekitar <b style="font-size:16px;">${minMatch}</b> win beruntun tanpa kalah untuk mencapai WR ${wrReq}% ⚡`;
+}
+
+// --- GACHA SYSTEM ---
+function putarGacha() {
+    let activeUser = localStorage.getItem('mf_logged_in') || 'Guest';
+    let lastSpinDate = localStorage.getItem(`mf_last_spin_${activeUser}`);
+    let today = new Date().toDateString();
+    
+    let resBox = document.getElementById("gacha-result");
+    
+    if (lastSpinDate === today) {
+        resBox.style.display = 'block';
+        resBox.style.color = '#ef4444';
+        resBox.style.borderColor = '#ef4444';
+        resBox.innerHTML = "❌ Kakak sudah gacha hari ini. Coba lagi besok!";
+        return;
+    }
+
+    let btn = document.getElementById("btn-gacha");
+    btn.innerHTML = "<i class='fas fa-sync-alt fa-spin'></i> MEMUTAR...";
+    btn.disabled = true;
+    resBox.style.display = 'none';
+
+    setTimeout(() => {
+        let rand = Math.random() * 100;
+        let result;
+
+        if (rand <= 20) {
+            // Prioritas (20%)
+            let item = promoPrioritas[Math.floor(Math.random() * promoPrioritas.length)];
+            result = { type: "promo", val: item.code, text: `KODE PROMO PRIORITAS DISKON ${item.disc * 100}%!` };
+        } else if (rand <= 50) {
+            // Premium (30% odds to cover from 20 to 50)
+            let item = promoPremium[Math.floor(Math.random() * promoPremium.length)];
+            result = { type: "promo", val: item.code, text: `KODE PROMO PREMIUM DISKON ${item.disc * 100}%!` };
+        } else if (rand <= 80) {
+            // Biasa (30% odds to cover from 50 to 80)
+            let item = promoBiasa[Math.floor(Math.random() * promoBiasa.length)];
+            result = { type: "promo", val: item.code, text: `KODE PROMO BIASA DISKON ${item.disc * 100}%!` };
+        } else {
+            // Zonk (20% odds remainder)
+            result = { type: "zonk", val: "", text: "Zonk : coba lagi besok ya Kak!" };
+        }
+        
+        resBox.style.display = 'block';
+        if (result.type === "promo") {
+            resBox.style.color = '#10b981';
+            resBox.style.borderColor = '#10b981';
+            resBox.innerHTML = `🎉 SELAMAT! Kakak dapat <br><b style="font-size:18px;color:white;background:#10b981;padding:5px 10px;border-radius:8px;margin-top:10px;display:inline-block;box-shadow:0 0 10px rgba(16,185,129,0.5);">${result.val}</b><br><span style="font-size:10px;color:white;display:block;margin-top:5px;">(Ketik kode ini di kolom promo saat topup)</span>`;
+            localStorage.setItem('gachaPromo', result.val);
+        } else {
+            resBox.style.color = '#ef4444';
+            resBox.style.borderColor = '#ef4444';
+            resBox.innerHTML = `😢 ${result.text}`;
+        }
+        
+        localStorage.setItem(`mf_last_spin_${activeUser}`, today);
+        btn.innerHTML = "<i class='fas fa-gift'></i> SPIN BESOK LAGI";
+    }, 2000);
+}
+
+// --- RIWAYAT & CEK PESANAN SYSTEM ---
+function simpanRiwayat(inv, game, item, harga, tgl, pay, tgt) {
+    let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]');
+    const activeUser = localStorage.getItem('mf_logged_in') || 'Guest';
+    
+    r.unshift({ inv, game, item, harga, tgl, pay, tgt, user: activeUser, status: 'PROSES' });
+    if(r.length > 50) r.pop();
+    localStorage.setItem('mf_riwayat', JSON.stringify(r));
+}
+
+function muatRiwayat() {
+    let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]');
+    const activeUser = localStorage.getItem('mf_logged_in');
+    let container = document.getElementById('list-riwayat');
+    let userRiwayat = r.filter(x => x.user === activeUser);
+
+    if (userRiwayat.length === 0) {
+        container.innerHTML = '<div style="text-align: center; opacity: 0.5; font-size: 10px; padding: 10px;">Belum ada pesanan</div>';
+        return;
+    }
+
+    let h = "";
+    userRiwayat.slice(0, 3).forEach(x => {
+        h += `
+        <div class="riwayat-item">
+            <div>
+                <div style="font-size: 10px; color: #94a3b8; font-weight: bold; margin-bottom: 2px;">${x.inv}</div>
+                <div style="font-size: 12px; font-weight: 800; color: white;">${x.item} ${x.game}</div>
+                <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">Target: ${x.tgt}</div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 11px; font-weight: 800; color: var(--accent);">Rp ${x.harga.toLocaleString('id-ID')}</div>
+                <div class="status-badge"><i class="fas fa-spinner fa-spin"></i> ${x.status}</div>
+            </div>
+        </div>
+        `;
+    });
+    
+    if(userRiwayat.length > 3) {
+        h += `<div style="text-align:center; font-size:10px; color:#94a3b8; margin-top:10px;">+ ${userRiwayat.length - 3} pesanan lainnya</div>`;
+    }
+
+    container.innerHTML = h;
+}
+
+function hapusRiwayat() {
+    if(confirm("Yakin ingin menghapus riwayat trx? (Data tetap ada di admin)")){
+        const activeUser = localStorage.getItem('mf_logged_in');
+        let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]');
+        r = r.filter(x => x.user !== activeUser);
+        localStorage.setItem('mf_riwayat', JSON.stringify(r));
+        muatRiwayat();
+        alert('Riwayat berhasil dihapus dari tampilan.');
+    }
+}
+
+function cekPesanan() {
+    let input = document.getElementById('input-cek-order').value.trim();
+    let resBox = document.getElementById('hasil-cek-order');
+    
+    if(!input) {
+        resBox.style.display = 'block'; resBox.innerHTML = "<span style='color:#ef4444'>Masukkan ID atau No HP!</span>";
+        return;
+    }
+
+    let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]');
+    const activeUser = localStorage.getItem('mf_logged_in');
+    
+    let found = r.filter(x => (x.inv === input || x.tgt === input) && x.user === activeUser);
+
+    if (found.length > 0) {
+        resBox.style.display = 'block';
+        let h = "<b style='color:#22d3ee; display:block; margin-bottom:8px;'>HASIL PENCARIAN:</b>";
+        found.forEach(x => {
+            h += `
+                <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:8px;">
+                    <div>INV: <span style="color:#22d3ee">${x.inv}</span></div>
+                    <div>Item: ${x.item} ${x.game}</div>
+                    <div>Target: ${x.tgt}</div>
+                    <div>Status: <span style="color:#10b981; font-weight:bold;">${x.status}</span></div>
+                </div>
+            `;
+        });
+        resBox.innerHTML = h;
+    } else {
+        resBox.style.display = 'block'; 
+        resBox.innerHTML = "<span style='color:#ef4444'>Data pesanan tidak ditemukan atau milik user lain.</span>";
+    }
+}
+
+// --- CHATBOT & TIME SYSTEM ---
+function tTime() {
+    const d = new Date();
+    document.getElementById('header-jam').innerText = d.toLocaleTimeString('id-ID');
+    document.getElementById('header-tgl').innerText = d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+setInterval(tTime, 1000); tTime();
+
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+function toggleChat() { 
+    let b = document.getElementById('chat-box');
+    b.style.display = b.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function injectWelcomeAI(user) {
+    document.getElementById('chat-content').innerHTML = `
+        <div class="chat-msg bot">
+            Halo Kak <b>${user}</b>! Welcome to Fanzxshop 😊<br><br>
+            Ada yang bisa saya bantu? Kk bisa tanya soal produk, cara top up, keluhan transaksi, metode bayar, atau promo diskon loh!
+        </div>`;
+}
+
+function addChat(msg, type) {
+    let box = document.getElementById('chat-content');
+    box.innerHTML += `<div class="chat-msg ${type}">${msg}</div>`;
+    box.scrollTop = box.scrollHeight;
+}
+
+function sendChat() {
+    let input = document.getElementById('chat-in');
+    let box = document.getElementById('chat-content');
+    let msg = input.value.trim();
+    if (!msg) return;
+
+    addChat(msg, 'user');
+    input.value = "";
+
+    let botMsgId = "bot-" + Date.now();
+    box.innerHTML += `<div id="${botMsgId}" class="chat-msg bot"><i class="fas fa-circle-notch fa-spin"></i> Mengetik...</div>`;
+    box.scrollTop = box.scrollHeight;
+
+    setTimeout(() => {
+        let reply = getSmartReply(msg.toLowerCase());
+        document.getElementById(botMsgId).innerHTML = reply;
+        box.scrollTop = box.scrollHeight;
+    }, 1500);
+}
+
+function getSmartReply(text) {
+    if (/(halo|hai|p|assalamu|selamat|pagi|siang|sore|malam)/i.test(text)) {
+        return "Halo Kak! 👋 Ada yang bisa AI bantu hari ini? Kakak bisa tanya soal cara order, promo, atau kendala transaksi lho.";
+    } 
+    else if (/(top up|cara order|beli|pesan|gimana|cara)/i.test(text)) {
+        return "Gampang banget Kak! 🎮<br>1. Pilih kategori di menu atas<br>2. Masukkan ID tujuan/No HP<br>3. Pilih nominal & metode bayar<br>4. Klik 'ORDER SEKARANG' di bawah ya!";
+    } 
+    else if (/(bayar|qris|dana|ovo|gopay|shopee|metode|pembayaran)/i.test(text)) {
+        return "Untuk pembayaran, FANZ CELL menyediakan QRIS, E-WALLET (DANA, GoPay, ShopeePay), dan Cash (Uang Pas). Prosesnya dijamin cepat & aman Kak! 💸";
+    } 
+    else if (/(lama|belum masuk|pending|status|cek|masalah|kendala|error)/i.test(text)) {
+        return "Waduh, maaf kalau buat Kakak menunggu ya 🙏. Normalnya pesanan masuk 1-5 menit. Coba cek status di menu 'Cek Pesanan' ya. Kalau masih belum masuk, klik menu 'FAQ & Bantuan' buat chat Admin langsung.";
+    } 
+    else if (/(promo|diskon|gacha|murah|kode)/i.test(text)) {
+        return "Lagi cari potongan harga? Klik menu 'Gacha Promo' & dapat kesempatan 1x sehari buat dapetin kode diskon spesial lho! 🎁";
+    } 
+    else if (/(admin|bantuan|cs|tolong|manusia)/i.test(text)) {
+        return "Untuk keluhan khusus, Kakak bisa langsung ngobrol dg Admin. Buka menu navigasi <b>'FAQ & Bantuan'</b> di halaman utama, lalu klik tombol <b>Hubungi Admin</b> ya Kak.";
+    } 
+    else if (/(makasih|terima kasih|thanks|ok|baik|oke|sip|mantap)/i.test(text)) {
+        return "Sama-sama Kak! Senang bisa membantu. Ditunggu terus ya orderannya di FANZXSHOP! 🥰";
+    } 
+    else {
+        return "Hmm.. maaf Kak, AI belum sepenuhnya tersedia di database yg kk cari. Boleh coba gunakan kata kunci singkat seperti <b>'Cara order'</b>, <b>'Pembayaran'</b>, <b>'Pesanan lama'</b>, atau <b>'Promo'</b>?";
+    }
+}
+
+// Initial setup
+checkLogin();
+pilihK('game', document.querySelector('.nav-box.active'));
+</script>
+</body>
+</html>
