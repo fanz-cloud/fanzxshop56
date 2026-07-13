@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FANZ CELL - Ultimate</title>
+    <title>FANZXCELL</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -13,16 +13,17 @@
     <style>
         :root { 
             --bg: #020617; 
-            --card: rgba(30, 41, 59, 0.6); 
+            --card: #111827; 
             --accent: #22d3ee; 
             --text: #f1f5f9; 
             --grad: linear-gradient(135deg, #0ea5e9, #6366f1); 
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+        html { scroll-behavior: smooth; } 
         body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 120px; overflow-x: hidden; }
         
-        header { background: rgba(15, 23, 42, 0.8); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        /* Efek Neon Branding dikembalikan sesuai instruksi */
+        header { background: rgba(15, 23, 42, 0.9); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
         .neon-brand { font-weight:800; font-size:1.2rem; text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 30px #0ea5e9; color: white; }
         .neon-brand span { color: var(--accent); }
         
@@ -30,101 +31,119 @@
         .header-icons { display: flex; gap: 15px; align-items: center; font-size: 18px; color: var(--text); }
         .header-icons i { cursor: pointer; transition: color 0.3s; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
         .header-icons i:hover { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
+        .notif-wrapper { position: relative; display: inline-block; }
+        .notif-dot { display: none; position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; box-shadow: 0 0 5px #ef4444; }
 
         .section-title { font-size: 11px; font-weight: 800; margin: 20px 0 10px; color: var(--accent); text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 8px; text-shadow: 0 0 5px rgba(34,211,238,0.5); }
-        .input-box { background: var(--card); padding: 15px; border-radius: 15px; backdrop-filter: blur(12px); border: 1px solid rgba(34, 211, 238, 0.2); box-shadow: 0 0 10px rgba(34, 211, 238, 0.1); }
+        .input-box { background: var(--card); padding: 15px; border-radius: 15px; border: 1px solid rgba(34, 211, 238, 0.2); box-shadow: 0 0 10px rgba(34, 211, 238, 0.1); }
         input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 8px; outline: none; transition: 0.3s; }
         input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(34, 211, 238, 0.5); }
         
         .btn-cek { background: var(--grad); color: white; border: none; padding: 0 15px; border-radius: 10px; font-weight: 800; cursor: pointer; box-shadow: 0 0 10px rgba(14, 165, 233, 0.5); }
 
-        /* Pay grid ditaruh di dalam modal, styling diperbaiki */
         .pay-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .pay-card { background: rgba(30, 41, 59, 0.8); padding: 12px 5px; border-radius: 12px; text-align: center; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: 0.3s; backdrop-filter: blur(12px); }
-        .pay-card:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(34, 211, 238, 0.4); border-color: var(--accent); }
-        .pay-card.selected { border-color: var(--accent); background: rgba(34,211,238,0.2); box-shadow: 0 0 20px rgba(34, 211, 238, 0.6); }
+        .pay-card { background: #1f2937; padding: 12px 5px; border-radius: 12px; text-align: center; cursor: pointer; border: 2px solid rgba(255,255,255,0.05); transition: 0.2s; }
+        .pay-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+        .pay-card.selected { border-color: var(--accent); background: rgba(34,211,238,0.15); box-shadow: 0 0 15px rgba(34, 211, 238, 0.4); }
         .pay-card i { font-size: 20px; margin-bottom: 8px; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
         .pay-card div { font-size: 11px; font-weight: 800; }
         .fee-tag { font-size: 9px; opacity: 0.8; color: #10b981; }
 
         .nav-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
         .nav-grid::-webkit-scrollbar { display: none; }
-        .nav-box { background: var(--card); padding: 10px 20px; border-radius: 12px; font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(12px); }
-        .nav-box.active { background: var(--grad); color: white; border-color: var(--accent); box-shadow: 0 0 20px rgba(14, 165, 233, 0.6); }
+        .nav-box { background: var(--card); padding: 10px 20px; border-radius: 12px; font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
+        .nav-box.active { background: var(--grad); color: white; border-color: var(--accent); box-shadow: 0 0 15px rgba(14, 165, 233, 0.5); }
         
         #area-layanan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .layanan-item { background: var(--card); padding: 10px 5px; border-radius: 10px; text-align: center; font-size: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.2s; border: 1px solid rgba(255,255,255,0.05); }
         .layanan-item.active { background: var(--grad); color: white; box-shadow: 0 0 15px rgba(14, 165, 233, 0.5); border-color: var(--accent); }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card { background: var(--card); padding: 12px; border-radius: 15px; text-align: center; cursor: pointer; border: 2px solid rgba(255,255,255,0.05); transition: 0.2s; backdrop-filter: blur(12px); }
-        .card.selected { border-color: var(--accent); background: rgba(34,211,238,0.15); transform: scale(1.02); box-shadow: 0 0 20px rgba(34, 211, 238, 0.5); }
+        .card { background: var(--card); padding: 12px; border-radius: 15px; text-align: center; cursor: pointer; border: 2px solid rgba(255,255,255,0.05); transition: 0.2s; }
+        .card.selected { border-color: var(--accent); background: rgba(34,211,238,0.15); transform: scale(1.02); box-shadow: 0 0 15px rgba(34, 211, 238, 0.4); }
         .card .price { color: var(--accent); font-size: 11px; font-weight: 800; margin-top: 5px; text-shadow: 0 0 5px rgba(34,211,238,0.5); }
 
-        /* CHATBOT */
+        #maint-box { display: none; background: rgba(239, 68, 68, 0.1); border: 1px dashed #ef4444; padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 15px; box-shadow: 0 0 15px rgba(239, 68, 68, 0.1); }
+        .maint-title { color: #ef4444; font-size: 12px; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(239,68,68,0.5); }
+        .maint-grid { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        .maint-time-card { background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; padding: 10px; border-radius: 10px; min-width: 60px; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+        .maint-val { font-size: 20px; font-weight: 900; }
+        .maint-lab { font-size: 9px; text-transform: uppercase; opacity: 0.9; }
+
         #chat-btn { position: fixed; bottom: 85px; right: 20px; width: 55px; height: 55px; background: var(--grad); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 3000; box-shadow: 0 0 20px rgba(34, 211, 238, 0.6); cursor: pointer; transition: transform 0.3s; }
         #chat-btn:hover { transform: scale(1.1); }
-        #chat-box { display: none; position: fixed; bottom: 155px; right: 20px; width: 320px; height: 450px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-radius: 20px; z-index: 4000; flex-direction: column; overflow: hidden; border: 1px solid var(--accent); box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(34, 211, 238, 0.3); animation: slideUp 0.3s ease; }
+        #chat-box { display: none; position: fixed; bottom: 155px; right: 20px; width: 320px; height: 450px; background: rgba(15, 23, 42, 0.98); border-radius: 20px; z-index: 4000; flex-direction: column; overflow: hidden; border: 1px solid var(--accent); box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(34, 211, 238, 0.3); animation: slideUp 0.3s ease; }
         .chat-h { background: var(--grad); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
         .chat-b { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 12px; }
         .chat-msg { padding: 10px 12px; border-radius: 12px; max-width: 85%; line-height: 1.4; }
         .chat-msg.user { background: var(--grad); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .chat-msg.bot { background: #1e293b; color: #f1f5f9; align-self: flex-start; border: 1px solid rgba(34,211,238,0.3); border-bottom-left-radius: 2px; box-shadow: 0 0 10px rgba(34,211,238,0.1); }
+        .chat-msg.bot { background: #1e293b; color: #f1f5f9; align-self: flex-start; border: 1px solid rgba(34,211,238,0.3); border-bottom-left-radius: 2px; }
         
-        .footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--accent); z-index: 2000; backdrop-filter: blur(15px); box-shadow: 0 -5px 20px rgba(34, 211, 238, 0.2); }
+        .footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--accent); z-index: 2000; box-shadow: 0 -5px 20px rgba(34, 211, 238, 0.2); }
 
-        /* RUNNING TEXT */
         .running-text { width:100%; overflow:hidden; background:rgba(34,211,238,0.1); border:1px solid rgba(34,211,238,0.3); border-radius:10px; margin-bottom:15px; }
-        .running-content { display:inline-block; white-space:nowrap; padding:8px 0; font-size:11px; font-weight:700; color:var(--accent); animation:scrollText 25s linear infinite; }
-        @keyframes scrollText { 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
+        .running-content { padding:8px 0; font-size:11px; font-weight:700; color:var(--accent); }
 
-        /* MODAL */
-        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; backdrop-filter: blur(8px); padding: 20px; }
-        .modal-box { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); padding:20px; width:100%; max-width:380px; border-radius:20px; border:1px solid var(--accent); box-shadow: 0 0 40px rgba(34, 211, 238, 0.4); animation: zoomIn 0.3s ease; max-height: 90vh; overflow-y: auto; }
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; padding: 20px; }
+        .modal-box { background: #0f172a; padding:20px; width:100%; max-width:380px; border-radius:20px; border:1px solid var(--accent); box-shadow: 0 0 40px rgba(34, 211, 238, 0.4); animation: zoomIn 0.3s ease; max-height: 90vh; overflow-y: auto; }
         .modal-btns { display:flex; gap:10px; margin-top:15px; }
         .modal-btns button { flex:1; padding:12px; border-radius:10px; border:none; font-weight:800; cursor:pointer; }
 
-        /* RIWAYAT BOX */
-        .riwayat-box { background: var(--card); border-radius: 15px; padding: 15px; border: 1px solid rgba(34,211,238,0.2); margin-bottom: 15px; backdrop-filter: blur(12px); box-shadow: 0 0 15px rgba(34, 211, 238, 0.05); }
-        .riwayat-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .status-badge { font-size: 9px; font-weight: 800; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 3px 10px; border-radius: 6px; display: inline-block; margin-top: 5px; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .prof-card { background: #1f2937; border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; padding: 12px 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 12px; transition: 0.3s; }
+        .prof-card:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(34,211,238,0.2); }
+        .prof-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .prof-info { flex: 1; overflow: hidden; }
+        .prof-label { font-size: 11px; font-weight: 800; color: white; margin-bottom: 3px; }
+        .prof-val { font-size: 10px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* GACHA CSS */
+        .faq-header-bg { background: var(--grad); padding: 25px 20px 30px; text-align: center; border-radius: 20px 20px 0 0; position: relative; border-bottom: 2px solid var(--accent); }
+        .faq-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }
+        .faq-badge { background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; font-size: 9px; color: white; border: 1px solid rgba(255,255,255,0.3); }
+        .faq-search-box { position: relative; margin-top: 15px; }
+        .faq-search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #64748b; }
+        .faq-search-box input { width: 100%; padding: 12px 12px 12px 40px; border-radius: 25px; border: 1px solid var(--accent); background: white; color: black; font-size: 11px; }
+
+        .faq-list-container { padding: 15px; background: white; overflow-y: auto; flex: 1; border-radius: 0 0 20px 20px; }
+        .faq-item { border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 10px; background: white; overflow: hidden; }
+        .faq-head { padding: 15px; font-size: 11px; font-weight: 700; color: #334155; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; }
+        .faq-body { padding: 0 15px 15px; font-size: 10px; color: #475569; display: none; line-height: 1.6; border-top: 1px solid #f1f5f9; margin-top: 5px; padding-top: 10px; }
+        .faq-item.active { border-color: var(--accent); box-shadow: 0 0 10px rgba(34, 211, 238, 0.2); }
+        .faq-item.active .faq-head { color: #2563eb; }
+        .badge-blue { background: #3b82f6; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 9px; display: inline-block; margin-bottom: 3px;}
+
+        .riwayat-box { background: var(--card); border-radius: 15px; padding: 15px; border: 1px solid rgba(34,211,238,0.2); margin-bottom: 15px; box-shadow: 0 0 15px rgba(34, 211, 238, 0.05); }
+        .riwayat-item { display: flex; justify-content: space-between; align-items: center; background: #1f2937; padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer; transition: 0.2s; }
+        .riwayat-item:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(34, 211, 238, 0.2); }
+        .status-badge { font-size: 9px; font-weight: 800; border-radius: 6px; display: inline-block; margin-top: 5px; padding: 3px 10px; }
         .gacha-btn { width: 100%; padding: 20px; background: linear-gradient(45deg, #f59e0b, #ef4444); color: white; border: none; border-radius: 15px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); transition: 0.3s; margin-top:15px; text-transform: uppercase; letter-spacing: 1px;}
-        .gacha-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(245, 158, 11, 0.6); }
-        .gacha-result { margin-top: 20px; padding: 15px; border-radius: 15px; text-align: center; font-size: 14px; font-weight: bold; display: none; border: 2px dashed #f59e0b; background: rgba(245, 158, 11, 0.1); color: #fcd34d; }
         .calc-result { background: rgba(34, 211, 238, 0.1); border: 1px dashed var(--accent); padding: 15px; border-radius: 12px; text-align: center; margin-top: 15px; font-size: 13px; font-weight: 700; color: var(--text); }
+        
+        /* CSS Tambahan untuk Detail Transaksi */
+        .dt-header { background: #3b82f6; color: white; padding: 20px; border-radius: 15px 15px 0 0; text-align: center; position: relative; }
+        .dt-card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); margin-top: -10px; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .dt-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 11px; }
+        .dt-row.dashed { border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px; }
+        .dt-sn-box { background: rgba(34, 211, 238, 0.05); border: 1px dashed var(--accent); padding: 15px; border-radius: 10px; text-align: center; color: var(--accent); font-weight: 800; word-break: break-all; margin: 15px 0; font-size: 12px; }
+        .btn-cetak { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .btn-cetak:hover { background: #2563eb; }
 
-        /* MAINTENANCE */
-        #maint-box { display: none; background: var(--card); border-radius: 20px; padding: 20px; text-align: center; border: 2px solid #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); margin-bottom: 20px; animation: pulse-maint 2s infinite; }
-        @keyframes pulse-maint { 0% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); } 50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.6); } 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); } }
-        .maint-title { color: #ef4444; font-weight: 800; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .maint-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
-        .maint-time-card { background: rgba(15, 23, 42, 0.8); padding: 15px 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .maint-val { font-size: 28px; font-weight: 800; color: white; font-family: monospace; }
-        .maint-lab { font-size: 9px; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
-        .maint-status { background: #ef4444; color: white; font-size: 11px; font-weight: 800; padding: 8px; border-radius: 10px; display: inline-block; }
-
-        /* ANIMATIONS */
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 
 <body>
-   <div id="auth-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.9); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(15px);">
-    <div style="width: 100%; max-width: 400px; background: rgba(30, 41, 59, 0.8); border-radius: 24px; padding: 30px; border: 1px solid var(--accent); box-shadow: 0 0 40px rgba(34, 211, 238, 0.4);">
-        
+   <!-- MODAL AUTENTIKASI -->
+   <div id="auth-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div style="width: 100%; max-width: 400px; background: #0f172a; border-radius: 24px; padding: 30px; border: 1px solid var(--accent); box-shadow: 0 0 40px rgba(34, 211, 238, 0.4);">
         <div style="text-align: center; margin-bottom: 20px;">
             <h1 class="neon-brand" style="margin: 0; font-size: 32px;">FANZX <span>SHOP</span></h1>
             <p style="margin: 5px 0 0; font-size: 12px; color: #94a3b8;">Web Top Up Teraman & Legal</p>
         </div>
-
-        <div style="display: flex; background: #0f172a; padding: 5px; border-radius: 15px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);">
+        <div style="display: flex; background: #1e293b; padding: 5px; border-radius: 15px; margin-bottom: 25px;">
             <div id="tab-login" onclick="switchAuth('login')" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 14px; transition: 0.3s; background: var(--grad); color: white; box-shadow: 0 0 10px rgba(34,211,238,0.4);">LOGIN</div>
             <div id="tab-register" onclick="switchAuth('register')" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 14px; transition: 0.3s; color: #94a3b8;">REGISTER</div>
         </div>
-
         <div id="form-login">
             <input type="text" id="l-user" placeholder="Username" required>
             <div style="position: relative; margin-bottom: 15px;">
@@ -133,10 +152,10 @@
             </div>
             <button onclick="handleLogin()" style="width: 100%; padding: 16px; background: var(--grad); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; box-shadow: 0 0 20px rgba(14, 165, 233, 0.5); transition: 0.3s;">MASUK</button>
         </div>
-        
         <div id="form-register" style="display: none;">
             <input type="text" id="r-user" placeholder="Username (Min 4 Karakter)" required>
-            <input type="number" id="r-wa" placeholder="No aktif (08xx)" required>
+            <input type="email" id="r-email" placeholder="Email Aktif" required>
+            <input type="number" id="r-wa" placeholder="No (08xx)" required>
             <div style="position: relative; margin-bottom: 15px;">
                 <input type="password" id="r-pass" placeholder="Buat Password (Min 6 Karakter)" style="margin-bottom: 0;" required>
                 <i class="fas fa-eye" onclick="togglePass('r-pass', this)" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer;"></i>
@@ -145,24 +164,109 @@
                 <input type="checkbox" id="r-terms" style="width: auto; margin: 0;" required>
                 <label for="r-terms">Saya setuju dengan Syarat & Ketentuan</label>
             </div>
-            <button onclick="handleRegister()" style="width: 100%; padding: 16px; background: #10b981; border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);">DAFTAR AKUN BARU</button>
+            <button onclick="handleRegister()" style="width: 100%; padding: 16px; background: #10b981; border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);">DAFTAR AKUN</button>
         </div>
     </div>
 </div>
 
+<!-- MODAL NOTIFIKASI -->
+<div id="notif-modal" class="modal-overlay">
+    <div class="modal-box" style="padding: 0; max-width: 400px; height: 85vh; display: flex; flex-direction: column; overflow: hidden; background: #0f172a; border: 1px solid var(--accent);">
+        <div style="background: var(--grad); padding: 20px; display: flex; align-items: center; justify-content: space-between; border-radius: 20px 20px 0 0;">
+            <i class="fas fa-arrow-left" onclick="closeModal('notif-modal')" style="color: white; cursor: pointer; font-size: 18px;"></i>
+            <h3 style="margin: 0; color: white; font-size: 16px; font-weight: 800;">Notifikasi</h3>
+            <div style="display:flex; gap:15px; align-items: center;">
+                <i class="fas fa-trash-alt" onclick="clearNotif()" style="color: white; cursor: pointer; font-size: 16px;" title="Hapus Semua"></i>
+                <i class="fas fa-ellipsis-v" style="color: white; cursor: pointer; font-size: 16px;"></i>
+            </div>
+        </div>
+        <div style="display: flex; background: #1e293b; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div id="tab-notif-unread" onclick="switchNotifTab('unread')" style="flex: 1; text-align: center; padding: 15px; font-size: 11px; font-weight: 800; cursor: pointer; border-bottom: 2px solid var(--accent); color: var(--accent); transition: 0.3s;">BELUM DIBUKA</div>
+            <div id="tab-notif-read" onclick="switchNotifTab('read')" style="flex: 1; text-align: center; padding: 15px; font-size: 11px; font-weight: 800; cursor: pointer; color: #94a3b8; border-bottom: 2px solid transparent; transition: 0.3s;">TELAH DIBUKA</div>
+        </div>
+        <div id="notif-content" style="flex: 1; overflow-y: auto; padding: 15px; background: var(--bg);">
+            <!-- List notifikasi muncul di sini -->
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETAIL TRANSAKSI -->
+<div id="detail-trx-modal" class="modal-overlay">
+    <div class="modal-box" style="padding: 0; border: none; background: transparent;">
+        <div class="dt-header">
+            <i class="fas fa-arrow-left" onclick="closeModal('detail-trx-modal')" style="position: absolute; left: 20px; top: 20px; cursor: pointer; font-size: 16px;"></i>
+            <h3 style="margin: 0; font-size: 16px; font-weight: 800;">Detail Transaksi</h3>
+        </div>
+        <div class="dt-card">
+            <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
+                <div style="width: 45px; height: 45px; background: rgba(34,211,238,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--accent);">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div style="flex: 1;">
+                    <h4 id="dt-title" style="margin: 0 0 3px 0; font-size: 14px; color: white;">Produk</h4>
+                    <div style="font-size: 10px; color: #94a3b8; display: flex; align-items: center; gap: 5px;">
+                        <span id="dt-inv">#INV-123</span> <i class="far fa-copy" style="cursor:pointer;" onclick="alert('Invoice disalin!')"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dt-row dashed">
+                <span style="color: #94a3b8; font-weight: bold;">Transaksi</span>
+                <span id="dt-status"></span>
+            </div>
+
+            <div class="dt-row">
+                <span style="color: #94a3b8;">Waktu</span>
+                <strong id="dt-waktu" style="color: white;">-</strong>
+            </div>
+            <div class="dt-row dashed">
+                <span style="color: #94a3b8;">Tujuan</span>
+                <strong id="dt-tujuan" style="color: white;">-</strong>
+            </div>
+
+            <span style="font-size: 10px; color: #94a3b8;">SN (Serial Number)</span>
+            <div class="dt-sn-box" id="dt-sn">Pesanan masih diproses...</div>
+
+            <span style="font-size: 11px; font-weight: 800; color: white; display: block; margin-bottom: 10px;">Detail Pembayaran</span>
+            <div class="dt-row">
+                <span style="color: #94a3b8;">Metode Bayar</span>
+                <strong id="dt-metode" style="color: white;">-</strong>
+            </div>
+            <div class="dt-row">
+                <span style="color: #94a3b8;">Status Bayar</span>
+                <strong id="dt-status-bayar" style="color: white;">Lunas</strong>
+            </div>
+            <div class="dt-row dashed">
+                <span style="color: #94a3b8;">Harga</span>
+                <strong id="dt-harga" style="color: white;">Rp 0</strong>
+            </div>
+
+            <div class="dt-row">
+                <span style="color: var(--accent); font-weight: 800;">Total Pembayaran</span>
+                <strong id="dt-total" style="color: var(--accent); font-size: 14px;">Rp 0</strong>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-cetak" onclick="alert('Fitur Cetak Struk akan segera hadir!')"><i class="fas fa-print"></i> Cetak Struk</button>
+                <button style="background: #f97316; color: white; border: none; border-radius: 10px; width: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;"><i class="fas fa-pen"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PEMBAYARAN -->
 <div id="order-modal" class="modal-overlay">
   <div class="modal-box">
-    <h3 style="margin-top:0;color:var(--accent); text-shadow: 0 0 10px var(--accent); text-align:center;"><i class="fas fa-shopping-cart"></i> Konfirmasi Pesanan</h3>
+    <h3 style="margin-top:0;color:var(--accent); text-shadow: 0 0 10px var(--accent); text-align:center;"><i class="fas fa-shopping-cart"></i> Konfirm pesanan</h3>
 
-    <!-- 1. PILIH PEMBAYARAN DI DALAM MODAL -->
     <div id="payment-selection" style="display:block;">
         <p style="font-size:11px; font-weight:800; color:var(--text); margin-bottom:12px; text-align:center;">PILIH METODE PEMBAYARAN:</p>
         <div class="pay-grid">
-            <div class="pay-card" onclick="selectPayModal('SALDO AKUN', 0, this)">
-                <i class="fas fa-wallet"></i><div>SALDO AKUN</div><span class="fee-tag">Bebas Biaya</span>
+            <div class="pay-card" onclick="selectPayModal('SALDO AKUN', 800, this)">
+                <i class="fas fa-wallet"></i><div>SALDO AKUN</div><span class="fee-tag">+Rp 800</span>
             </div>
-            <div class="pay-card" onclick="selectPayModal('ALL BANK', 1000, this)">
-                <i class="fas fa-university"></i><div>ALL BANK</div><span class="fee-tag">+Rp 1.000</span>
+            <div class="pay-card" onclick="selectPayModal('ALL BANK', 2000, this)">
+                <i class="fas fa-university"></i><div>ALL BANK</div><span class="fee-tag">+Rp 2.000</span>
             </div>
             <div class="pay-card" onclick="selectPayModal('ALFAMART', 2500, this)">
                 <i class="fas fa-store"></i><div>ALFAMART</div><span class="fee-tag">+Rp 2.500</span>
@@ -170,8 +274,8 @@
             <div class="pay-card" onclick="selectPayModal('INDOMART', 2500, this)">
                 <i class="fas fa-store-alt"></i><div>INDOMART</div><span class="fee-tag">+Rp 2.500</span>
             </div>
-            <div class="pay-card" onclick="selectPayModal('QRIS', 800, this)">
-                <i class="fas fa-qrcode"></i><div>QRIS</div><span class="fee-tag">+Rp 800</span>
+            <div class="pay-card" onclick="selectPayModal('QRIS', 1000, this)">
+                <i class="fas fa-qrcode"></i><div>QRIS</div><span class="fee-tag">+Rp 1000</span>
             </div>
             <div class="pay-card" onclick="selectPayModal('CASH', 1500, this)">
                 <i class="fas fa-money-bill-wave"></i><div>CASH</div><span class="fee-tag">+Rp 1.500</span>
@@ -179,16 +283,15 @@
         </div>
     </div>
 
-    <!-- WADAH METODE PEMBAYARAN SPESIFIK -->
     <div id="specific-payment-container" style="display:none;">
         <div id="bank-container" style="display:none; margin-bottom:15px; background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; border:1px solid var(--accent);">
             <p style="font-size:11px; margin-top:0; color:var(--accent); font-weight:800; text-align:center;">PILIH BANK TUJUAN</p>
             <select id="bank-provider" onchange="showBankInstruction()" style="width:100%; padding:10px; background:#0f172a; color:white; border-radius:8px; border:1px solid var(--accent); font-weight:bold; outline:none;">
                 <option value="">-- Pilih Bank --</option>
-                <option value="bca">BCA (Bank Central Asia)</option>
+                <option value="bca">BCA</option>
                 <option value="mandiri">MANDIRI</option>
-                <option value="bri">BRI (Bank Rakyat Indonesia)</option>
-                <option value="bni">BNI (Bank Negara Indonesia)</option>
+                <option value="bri">BRI</option>
+                <option value="bni">BNI</option>
             </select>
             <div id="bank-instructions"></div>
         </div>
@@ -199,7 +302,7 @@
             <div style="background:white; color:black; padding:15px; font-size:22px; font-weight:900; letter-spacing:3px; border-radius:10px; box-shadow:0 0 15px rgba(255,255,255,0.2);" id="minimart-code"></div>
         </div>
 
-        <div id="qr-container" style="display:none; text-align:center; margin-bottom:15px; background:white; padding:15px; border-radius:20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+        <div id="qr-container" style="display:none; text-align:center; margin-bottom:15px; background:white; padding:15px; border-radius:20px;">
             <p style="color:#0f172a; font-size:11px; font-weight:800; margin-top:0; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">PILIH QR⚡</p>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center;">
                 <div style="text-align:center; padding: 5px; border: 1px solid #e2e8f0; border-radius: 10px;">
@@ -230,50 +333,198 @@
 
     <div class="modal-btns">
       <button onclick="closeModal('order-modal')" style="background:#334155;color:white;">BATAL</button>
-      <button id="btn-confirm" onclick="confirmOrder()" style="display:none; background:var(--grad); color:white; box-shadow:0 0 15px rgba(34,211,238,0.5);">KONFIRMASI</button>
+      <button id="btn-confirm" onclick="confirmOrder()" style="display:none; background:var(--grad); color:white; box-shadow:0 0 15px rgba(34,211,238,0.5);">KONFIRM</button>
     </div>
   </div>
 </div>
 
+<!-- MODAL PROFIL -->
 <div id="profile-modal" class="modal-overlay">
-    <div class="modal-box">
-        <h3 style="margin-top:0; color:var(--accent); text-align:center; text-shadow:0 0 10px var(--accent);"><i class="fas fa-user-circle"></i> Profil Akun</h3>
-        <div style="background: rgba(15, 23, 42, 0.8); padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 15px; border: 1px solid var(--accent); box-shadow:0 0 20px rgba(34,211,238,0.1);">
+    <div class="modal-box" style="padding: 0; background: var(--bg); max-height: 90vh; display: flex; flex-direction: column;">
+        <div style="background: var(--card); padding: 20px; border-bottom: 1px solid var(--accent); display: flex; align-items: center; gap: 15px;">
+            <div style="position: relative;">
+                <img id="prof-img" src="" style="display:none; width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" onclick="changeAvatar()">
+                <div style="width: 60px; height: 60px; background: var(--grad); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: white;" id="prof-avatar" onclick="changeAvatar()">U</div>
+                <div style="position: absolute; bottom: 0; right: 0; background: var(--accent); color: black; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; cursor: pointer; border: 2px solid var(--bg);" onclick="changeAvatar()"><i class="fas fa-camera"></i></div>
+            </div>
+            <div>
+                <h2 id="prof-name" style="margin: 0 0 5px; font-size: 16px; color: white; text-shadow: 0 0 10px var(--accent);">Username</h2>
+                <div id="prof-top-tier-label" style="background: #334155; color: white; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 12px; display: inline-flex; align-items: center; gap: 5px;"><i class="fas fa-user"></i> Member</div>
+            </div>
+            <i class="fas fa-times" onclick="closeModal('profile-modal')" style="margin-left: auto; font-size: 20px; color: #94a3b8; cursor: pointer; padding: 5px;"></i>
+        </div>
+
+        <div style="padding: 20px; overflow-y: auto; flex: 1;">
+            <h4 style="margin: 0 0 15px; color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Informasi Akun</h4>
             
-            <img id="prof-img" src="" style="display:none; width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 10px; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 0 15px rgba(34, 211, 238, 0.6); cursor: pointer;" onclick="changeAvatar()">
-            <div style="width: 70px; height: 70px; background: var(--grad); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: white; box-shadow: 0 0 20px rgba(34, 211, 238, 0.6); cursor: pointer;" id="prof-avatar" onclick="changeAvatar()">U</div>
-            <p style="font-size:9px; color:#94a3b8; margin:-5px 0 10px 0; cursor:pointer;" onclick="changeAvatar()">Klik foto untuk ubah</p>
-            
-            <h2 id="prof-name" style="margin: 0 0 5px; font-size: 18px; color:white;">Username</h2>
-            <p id="prof-wa" style="margin: 0; color: #94a3b8; font-size: 12px;">08xxxxxxx</p>
+            <div class="prof-card">
+                <div class="prof-icon" style="background: rgba(16,185,129,0.1); color: #10b981;"><i class="fas fa-wallet"></i></div>
+                <div class="prof-info">
+                    <div class="prof-label">Saldo Akun</div>
+                    <div class="prof-val" id="prof-saldo" style="color: #10b981; font-weight: 800; font-size: 14px;">Rp 0</div>
+                </div>
+                <div onclick="openTopUpModal()" style="width: 35px; height: 35px; background: rgba(34,211,238,0.1); border: 1px solid var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent); cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(34,211,238,0.2);">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </div>
+
+            <!-- Tambahan Fitur dari Foto (N-Koin & Referral) -->
+            <div class="prof-card">
+                <div class="prof-icon" style="background: rgba(234,179,8,0.1); color: #eab308;"><i class="fas fa-coins"></i></div>
+                <div class="prof-info">
+                    <div class="prof-label">N-Koin</div>
+                    <div class="prof-val" style="color:#eab308; font-weight:bold;" id="prof-koin-val">0</div>
+                </div>
+            </div>
+            <div class="prof-card">
+                <div class="prof-icon" style="background: rgba(16,185,129,0.1); color: #10b981;"><i class="fas fa-share-alt"></i></div>
+                <div class="prof-info">
+                    <div class="prof-label">Kode Referral</div>
+                    <div class="prof-val" style="font-weight:bold; color:var(--text)" id="prof-ref-val">FANZ...</div>
+                </div>
+            </div>
+
+            <div class="prof-card" onclick="openTierModal()" style="cursor: pointer; border: 1px solid #eab308; background: rgba(234,179,8,0.05);">
+                <div class="prof-icon" style="background: rgba(234,179,8,0.1); color: #eab308;"><i class="fas fa-crown"></i></div>
+                <div class="prof-info">
+                    <div class="prof-label">Tipe Akun <span style="font-size: 8px; background: #eab308; color: black; padding: 2px 5px; border-radius: 4px; margin-left: 5px;">INFO</span></div>
+                    <div class="prof-val" id="prof-tipe-val" style="color: #eab308; font-weight: 800; font-size: 12px; text-transform: uppercase;">MEMBER</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: #eab308; font-size: 12px;"></i>
+            </div>
+            <div class="prof-card"><div class="prof-icon" style="background: rgba(34,211,238,0.1); color: #22d3ee;"><i class="fas fa-user"></i></div><div class="prof-info"><div class="prof-label">Nama</div><div class="prof-val" id="prof-nama-val">Username</div></div></div>
+            <div class="prof-card"><div class="prof-icon" style="background: rgba(245,158,11,0.1); color: #f59e0b;"><i class="fas fa-envelope"></i></div><div class="prof-info"><div class="prof-label">Email</div><div class="prof-val" id="prof-email-val">email@anda.com</div></div></div>
+            <div class="prof-card"><div class="prof-icon" style="background: rgba(239,68,68,0.1); color: #ef4444;"><i class="fas fa-phone"></i></div><div class="prof-info"><div class="prof-label">No.Telepon</div><div class="prof-val" id="prof-wa-val">628xxx</div></div></div>
+            <div class="prof-card"><div class="prof-icon" style="background: rgba(59,130,246,0.1); color: #3b82f6;"><i class="fas fa-id-badge"></i></div><div class="prof-info"><div class="prof-label">ID Pengguna</div><div class="prof-val" id="prof-id-val">Uu1e</div></div></div>
+            <div class="prof-card"><div class="prof-icon" style="background: rgba(168,85,247,0.1); color: #a855f7;"><i class="fas fa-key"></i></div><div class="prof-info"><div class="prof-label">Token Pengguna</div><div class="prof-val" id="prof-token-val">d96aeb8...</div></div></div>
+            <div class="prof-card"><div class="prof-icon" style="background: rgba(16,185,129,0.1); color: #10b981;"><i class="fas fa-check-circle"></i></div><div class="prof-info"><div class="prof-label">Status Akun</div><div class="prof-val" style="color:#10b981; font-weight: 700;">Aktif</div></div></div>
+
+            <button onclick="handleLogout()" style="width: 100%; padding: 15px; margin-top: 10px; background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid #ef4444; border-radius: 12px; font-weight: 800; cursor: pointer;"><i class="fas fa-sign-out-alt"></i> LOGOUT</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TIER / TIPE AKUN -->
+<div id="tier-modal" class="modal-overlay">
+    <div class="modal-box" style="padding: 0; border: 1px solid #eab308; box-shadow: 0 0 30px rgba(234, 179, 8, 0.3);">
+        <div id="tier-header-bg" style="background: linear-gradient(135deg, #ca8a04, #eab308); padding: 20px; text-align: center; border-radius: 20px 20px 0 0; position: relative;">
+            <i class="fas fa-times" onclick="closeModal('tier-modal'); document.getElementById('profile-modal').style.display='flex';" style="position: absolute; right: 20px; top: 20px; color: black; cursor: pointer; font-size: 18px;"></i>
+            <i class="fas fa-crown" style="font-size: 40px; color: black; margin-bottom: 10px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));"></i>
+            <h2 style="margin: 0; color: black; font-weight: 900; font-size: 18px; text-transform: uppercase;" id="tier-title-display">MEMBER</h2>
+            <p style="margin: 5px 0 0; color: rgba(0,0,0,0.7); font-size: 11px; font-weight: 700;">Tingkatkan transaksi untuk naik level!</p>
         </div>
         
-        <div style="display: flex; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; border:1px solid rgba(255,255,255,0.1);">
-            <div>
-                <span style="font-size: 10px; color: #94a3b8; font-weight:bold;">Saldo Akun</span>
-                <div id="prof-saldo" style="font-size: 16px; font-weight: 900; color: #10b981; text-shadow:0 0 10px rgba(16,185,129,0.4);">Rp 250.000</div>
+        <div style="padding: 20px;">
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: center; border: 1px dashed rgba(255,255,255,0.2);">
+                <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">Total Transaksi</div>
+                <div style="font-size: 24px; font-weight: 900; color: white;" id="tier-trx-display">0 <span style="font-size: 12px; font-weight: normal; color: #94a3b8;">Trx</span></div>
+                <div style="width: 100%; background: #1e293b; height: 8px; border-radius: 10px; margin-top: 10px; overflow: hidden;"><div id="tier-progress-bar" style="height: 100%; background: #eab308; width: 0%; transition: width 0.5s;"></div></div>
+                <div style="font-size: 9px; color: #94a3b8; margin-top: 8px; text-align: right;" id="tier-next-target">Butuh 150 Trx lagi ke Reseller</div>
             </div>
-            <div style="text-align: right;">
-                <span style="font-size: 10px; color: #94a3b8; font-weight:bold;">Total Transaksi</span>
-                <div id="prof-trx" style="font-size: 16px; font-weight: 900; color: var(--accent); text-shadow:0 0 10px var(--accent);">0</div>
+
+            <h4 style="margin: 0 0 10px; color: #e2e8f0; font-size: 12px;">🏆 Keuntungan Level</h4>
+            <div style="display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
+                <div style="background: #1e293b; border: 1px solid #334155; border-left: 4px solid #94a3b8; padding: 12px; border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;"><strong style="color: #cbd5e1; font-size: 12px;">MEMBER</strong><span style="font-size: 9px; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 12px;">0-149 Trx</span></div>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 10px; color: #94a3b8;"><li>Harga reguler / normal</li><li>Akses fitur kalkulator & Gacha</li></ul>
+                </div>
+                <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-left: 4px solid #3b82f6; padding: 12px; border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;"><strong style="color: #60a5fa; font-size: 12px;">RESELLER</strong><span style="font-size: 9px; background: #3b82f6; color: white; padding: 3px 8px; border-radius: 12px;">150 Trx</span></div>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 10px; color: #94a3b8;"><li>Potongan harga 2% tiap produk</li><li>Prioritas CS Level 1</li></ul>
+                </div>
+                <div style="background: rgba(168, 85, 247, 0.1); border: 1px solid #a855f7; border-left: 4px solid #a855f7; padding: 12px; border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;"><strong style="color: #c084fc; font-size: 12px;">VIP</strong><span style="font-size: 9px; background: #a855f7; color: white; padding: 3px 8px; border-radius: 12px;">250 Trx</span></div>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 10px; color: #94a3b8;"><li>Potongan harga 5% tiap produk</li><li>Akses jalur transaksi VIP (Lebih Cepat)</li></ul>
+                </div>
+                <div style="background: rgba(234, 179, 8, 0.1); border: 1px solid #eab308; border-left: 4px solid #eab308; padding: 12px; border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;"><strong style="color: #fde047; font-size: 12px;">VVIP</strong><span style="font-size: 9px; background: #eab308; color: black; padding: 3px 8px; border-radius: 12px; font-weight: bold;">400 Trx</span></div>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 10px; color: #94a3b8;"><li>Potongan harga 10% (Reseller Spesial)</li><li>Admin Pribadi (FastRes 24/7)</li><li>Bonus Saldo & Promo Eksklusif</li></ul>
+                </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- MODAL BANTUAN -->
+<div id="bantuan-modal" class="modal-overlay">
+    <div class="modal-box" style="padding: 20px; max-width: 350px; text-align: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="margin: 0; color: var(--accent);"><i class="fas fa-headset"></i> BANTUAN</h3>
+            <i class="fas fa-times" onclick="closeModal('bantuan-modal')" style="cursor: pointer; color: #94a3b8; font-size: 18px;"></i>
+        </div>
+        <p style="font-size: 11px; color: #94a3b8; margin-top: 0; margin-bottom: 20px;">Pilih jalur bantuan untuk menghubungi Admin kami.</p>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+            <div onclick="window.open('https://wa.me/6287819661875', '_blank')" style="background: rgba(16, 185, 129, 0.1); padding: 15px 5px; border-radius: 12px; border: 1px solid #10b981; cursor: pointer; transition: 0.3s;"><i class="fab fa-whatsapp" style="font-size: 24px; color: #10b981; margin-bottom: 8px;"></i><div style="font-size: 10px; font-weight: 800; color: #10b981;">Hubungi CS kami via WhatsApp</div></div>
+            <div onclick="window.open('https://t.me/FanzOfficial32', '_blank')" style="background: rgba(59, 130, 246, 0.1); padding: 15px 5px; border-radius: 12px; border: 1px solid #3b82f6; cursor: pointer; transition: 0.3s;"><i class="fab fa-telegram-plane" style="font-size: 24px; color: #3b82f6; margin-bottom: 8px;"></i><div style="font-size: 10px; font-weight: 800; color: #3b82f6;">Hubungi CS kami via Telegram</div></div>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 15px 5px; border-radius: 12px; border: 1px dashed #94a3b8; cursor: not-allowed; opacity: 0.7;"><i class="fas fa-bullhorn" style="font-size: 24px; color: #94a3b8; margin-bottom: 8px;"></i><div style="font-size: 9px; font-weight: 800; color: #94a3b8;">Channel WA</div><div style="font-size: 8px; color: #ef4444; margin-top: 5px; font-weight: bold; background: rgba(239, 68, 68, 0.1); border-radius: 4px; padding: 2px;">Coming Soon</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL POPUP FAQ -->
+<div id="faq-modal" class="modal-overlay">
+    <div class="modal-box" style="padding: 0; max-width: 400px; height: 85vh; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--accent);">
+        <div class="faq-header-bg">
+            <i class="fas fa-arrow-left" onclick="closeModal('faq-modal')" style="position: absolute; left: 20px; top: 25px; color: white; cursor: pointer; font-size: 16px;"></i>
+            <h2 style="margin: 0 0 15px; color: white; font-size: 16px; font-weight: 800;">FAQ</h2>
+            <h3 style="margin: 0 0 10px; color: white; font-size: 14px;">Pertanyaan Yang Sering Di Ajukan</h3>
+            <p style="color: rgba(255,255,255,0.9); font-size: 9px; margin-bottom: 15px; line-height: 1.5;">Solusi lengkap untuk kebutuhan <span style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px;">pengisian pulsa, e-wallet, paket data, voucher game, transfer bank, dan QRIS</span> tanpa KTP. Layanan 24 jam dengan proses cepat dan aman.</p>
+            <div class="faq-badges">
+                <span class="faq-badge"><i class="fas fa-bolt"></i> Anti Pending Lama</span><span class="faq-badge"><i class="fas fa-clock"></i> Operasional 24 Jam</span><span class="faq-badge"><i class="fas fa-undo"></i> Pengembalian Real-time</span><span class="faq-badge"><i class="fas fa-shield-alt"></i> Tanpa KTP</span>
+            </div>
+            <div class="faq-search-box"><i class="fas fa-search"></i><input type="text" id="faq-search" onkeyup="cariFaq()" placeholder="Cari pertanyaan atau kata kunci..."></div>
+        </div>
+        <div class="faq-list-container">
+            <div class="faq-item active"><div class="faq-head" onclick="toggleFaq(this)">Layanan apa saja yang tersedia? <i class="fas fa-chevron-up"></i></div><div class="faq-body" style="display: block;">Kami menyediakan berbagai layanan digital termasuk:<ul style="padding-left: 15px; margin-top: 10px; line-height: 1.8;"><li><span class="badge-blue">Pulsa All Operator</span> - Telkomsel, Indosat, XL, Tri, dll</li><li><span class="badge-blue">E-Wallet</span> - Gopay, OVO, DANA, LinkAja, ShopeePay</li><li><span class="badge-blue">Paket Data</span> - Internet harian, mingguan, bulanan</li><li><span class="badge-blue">Voucher Game</span> - Mobile Legends, Free Fire, PUBG, dll</li><li><span class="badge-blue">Transfer Bank</span> - Semua bank Indonesia</li><li><span class="badge-blue">QRIS</span> - Pembayaran dengan QR code</li><li><span class="badge-blue">PLN</span> - Token listrik dan tagihan</li><li><span class="badge-blue">Tagihan</span> - Pembayaran iuran BPJS, listrik pln, PDAM dan beragam tagihan lainnya</li></ul></div></div>
+            <div class="faq-item"><div class="faq-head" onclick="toggleFaq(this)">Apakah benar tidak perlu KTP untuk bertransaksi? <i class="fas fa-chevron-down"></i></div><div class="faq-body">Iya betul Kak! Seluruh transaksi pembelian voucher dan top up di FANZX SHOP 100% instan dan tidak memerlukan verifikasi KTP.</div></div>
+            <div class="faq-item"><div class="faq-head" onclick="toggleFaq(this)">Bagaimana jika transaksi gagal? Apakah dana akan dikembalikan? <i class="fas fa-chevron-down"></i></div><div class="faq-body">Tentu saja. Sistem kami dilengkapi pengembalian (refund) real-time ke Saldo Akun Anda jika transaksi dinyatakan gagal dari pihak server pusat.</div></div>
+            <div class="faq-item"><div class="faq-head" onclick="toggleFaq(this)">Apakah layanan benar-benar 24 jam? <i class="fas fa-chevron-down"></i></div><div class="faq-body">Ya, website beroperasi otomatis 24 jam non-stop. Namun khusus pukul 22:30 WIB - 05:30 WIB terdapat waktu maintenance harian.</div></div>
+            <div class="faq-item"><div class="faq-head" onclick="toggleFaq(this)">Mengapa transaksi saya tertunda? Bagaimana solusinya? <i class="fas fa-chevron-down"></i></div><div class="faq-body">Tertunda (pending) biasanya terjadi karena antrean di server atau gangguan dari provider. Solusinya, silakan tunggu 1-5 menit. Jika belum masuk juga, klik hubungi Admin via WA.</div></div>
+            <div class="faq-item"><div class="faq-head" onclick="toggleFaq(this)">Bagaimana cara melakukan pengisian e-wallet? <i class="fas fa-chevron-down"></i></div><div class="faq-body">Sangat mudah. Pilih menu E-WALLET di halaman utama, masukkan Nomor HP tujuan, pilih nominal saldo yang diinginkan, dan selesaikan pembayaran.</div></div>
+            <div class="faq-item"><div class="faq-head" onclick="toggleFaq(this)">Apakah ada batasan nominal untuk transfer bank? <i class="fas fa-chevron-down"></i></div><div class="faq-body">Batasan transfer bank disesuaikan dengan limit dari masing-masing provider bank dan e-commerce yang digunakan saat proses pembayaran.</div></div>
+            <div class="faq-item"><div class="faq-head" onclick="toggleFaq(this)">Bagaimana cara menggunakan QRIS? <i class="fas fa-chevron-down"></i></div><div class="faq-body">Pilih metode bayar QRIS. Simpan (screenshot) gambar kode QRIS yang muncul, lalu buka aplikasi M-Banking atau E-Wallet Anda dan gunakan fitur Scan/Upload dari galeri. Pastikan transfer sesuai nominal!</div></div>
+            <div class="faq-item"><div class="faq-head" onclick="toggleFaq(this)">Apakah ada biaya tambahan untuk setiap transaksi? <i class="fas fa-chevron-down"></i></div><div class="faq-body">Ya, ada biaya layanan kecil tergantung metode pembayaran yang dipilih (mulai dari Rp 800 hingga Rp 2.500) dan akan tertulis transparan saat Anda akan checkout.</div></div>
+            <div class="faq-item"><div class="faq-head" onclick="toggleFaq(this)">Berapa lama proses pengisian pulsa dan paket data? <i class="fas fa-chevron-down"></i></div><div class="faq-body">Proses pengisian pulsa dan data 100% otomatis, biasanya memakan waktu hanya hitungan detik hingga maksimal 5 menit setelah pembayaran terkonfirmasi lunas.</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ISI SALDO -->
+<div id="topup-modal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 style="margin-top:0; color:var(--accent); text-shadow: 0 0 10px var(--accent); text-align:center;"><i class="fas fa-plus-square"></i> ISI SALDO (QRIS)</h3>
+        <p style="font-size:11px; text-align:center; color:#94a3b8;">Masukkan nominal.</p>
+        <input type="number" id="topup-amount" placeholder="Nominal (Min. Rp 5.000)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px; background:#0f172a; color:white; border:1px solid var(--accent); outline: none;">
+        <div id="topup-qris-area" style="display:none; text-align:center; background:white; padding:15px; border-radius:15px; margin-bottom:15px;">
+            <img src="qris.jpg" alt="QRIS Topup" style="width:100%; max-width:150px; border-radius:8px; margin-bottom:10px;">
+            <div style="background:rgba(34,211,238,0.1); padding:10px; border-radius:8px; border:1px dashed var(--accent);">
+                <p style="color:#0f172a; font-size:12px; font-weight:800; margin:0;">TOTAL:</p>
+                <p id="topup-total-show" style="color:var(--accent); font-size:16px; font-weight:900; margin:5px 0 0 0;"></p>
+            </div>
+            <p style="color:#ef4444; font-size:9px; font-weight:bold; margin-top:8px; background:rgba(239,68,68,0.1); padding:5px; border-radius:5px;">⚠️ Pastikan transfer sesuai nominal agar otomatis masuk!</p>
+        </div>
         <div class="modal-btns">
-            <button onclick="closeModal('profile-modal')" style="background:#334155;color:white;">TUTUP</button>
-            <button onclick="handleLogout()" style="background:#ef4444;color:white; box-shadow:0 0 15px rgba(239,68,68,0.5);"><i class="fas fa-sign-out-alt"></i> LOGOUT</button>
+            <button onclick="closeModal('topup-modal'); document.getElementById('topup-qris-area').style.display='none';" style="background:#334155;color:white;">BATAL</button>
+            <button id="btn-lanjut-topup" onclick="showTopupQris()" style="background:var(--grad); color:white;">BAYAR</button>
+            <button id="btn-konfirm-topup" onclick="confirmTopup()" style="display:none; background:#10b981; color:white;">SUDAH TRANSFER</button>
         </div>
     </div>
 </div>
 
 <header>
-    <div class="neon-brand">FANZX <span>SHOP</span></div>
+    <div class="neon-brand">FANZX<span>SHOP</span></div>
     <div style="display: flex; align-items: center; gap: 20px;">
         <div style="text-align:right">
             <div style="font-size: 9px; opacity: 0.8; color:#94a3b8;" id="header-tgl"></div>
             <div id="header-jam">00:00:00</div>
         </div>
         <div class="header-icons">
-            <i class="fas fa-bell" onclick="alert('Belum ada notifikasi baru untuk Kakak.')"></i>
+            <i class="fas fa-headset" onclick="document.getElementById('bantuan-modal').style.display='flex'"></i>
+            <div class="notif-wrapper" onclick="openNotif()">
+                <i class="fas fa-bell"></i>
+                <div class="notif-dot" id="notif-badge"></div>
+            </div>
+            <i class="fas fa-question-circle" onclick="document.getElementById('faq-modal').style.display='flex'"></i>
             <i class="fas fa-user-circle" onclick="openProfile()"></i>
         </div>
     </div>
@@ -282,20 +533,25 @@
 <div class="container" style="padding: 15px;">
     <div id="welcome" style="font-weight:800; margin-bottom:15px; font-size:15px">Welcome, <span id="user-display" style="color:var(--accent); text-shadow:0 0 10px var(--accent);">User</span>!</div>
     
+    <!-- MARQUEE -->
     <div class="running-text">
-        <div class="running-content">
-            Welcome to FANZX SHOP, moga langganan ^_^ • Cobain fitur Kalkulator WR MLBB! • Mainkan Gacha Harian untuk Diskon Spesial! • Proses Cepat & Aman • AI Chatbot siap membantu!🔥
-        </div>
+        <marquee class="running-content" scrollamount="4">
+            Welcome to FANZXSHOP ^^• Cobain fitur Kalkulator WR MLBB! • Mainkan Gacha Harian untuk Diskon Spesial! • Proses Cepat & Aman • AI Chatbot siap membantu!🔥
+        </marquee>
     </div>
     
     <div class="section-title">✨ Menu Navigasi</div>
     <div class="nav-grid">
-        <div class="nav-box active" onclick="pilihK('game', this)"><i class="fas fa-gamepad"></i> Top Up</div>
+        <!-- Tambahan Fitur dari Foto yang diadaptasikan ke Desain Lama -->
+        <div class="nav-box active" onclick="pilihK('game', this)"><i class="fas fa-gamepad"></i> Game</div>
         <div class="nav-box" onclick="pilihK('Voucher', this)"><i class="fas fa-ticket-alt"></i> Voucher</div>
-        <div class="nav-box" onclick="pilihK('pulsa', this)"><i class="fas fa-mobile-alt"></i> Pulsa / Data</div>
-        <div class="nav-box" onclick="pilihK('wallet', this)"><i class="fas fa-wallet"></i> E-WALLET</div>
-        
-        <div class="nav-box" onclick="pilihK('kalkulator', this)" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981;"><i class="fas fa-calculator"></i> Kalkulator WR</div>
+        <div class="nav-box" onclick="pilihK('pulsa', this)"><i class="fas fa-mobile-alt"></i> Pulsa</div>
+        <div class="nav-box" onclick="pilihK('PaketData', this)"><i class="fas fa-wifi"></i> Paket Data</div>
+        <div class="nav-box" onclick="pilihK('wallet', this)"><i class="fas fa-wallet"></i> E-Wallet</div>
+        <div class="nav-box" onclick="pilihK('PLN', this)"><i class="fas fa-lightbulb"></i> PLN</div>
+        <div class="nav-box" onclick="pilihK('PDAM', this)"><i class="fas fa-tint"></i> PDAM</div>
+        <div class="nav-box" onclick="pilihK('Cicilan', this)"><i class="fas fa-clipboard-list"></i> Cicilan</div>
+        <div class="nav-box" onclick="pilihK('kalkulator', this)" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981;"><i class="fas fa-calculator"></i> Kalku WR</div>
         <div class="nav-box" onclick="pilihK('spin', this)" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #f59e0b;"><i class="fas fa-gift"></i> Gacha Kode</div>
     </div>
 
@@ -308,9 +564,7 @@
                 <div class="maint-time-card"><div id="m-menit" class="maint-val">00</div><div class="maint-lab">Menit</div></div>
                 <div class="maint-time-card"><div id="m-detik" class="maint-val">00</div><div class="maint-lab">Detik</div></div>
             </div>
-            <div id="m-selesai" class="maint-status">Selesai pada: 00:00:00</div>
         </div>
-
         <div class="section-title">1. Tujuan</div>
         <div class="input-box">
             <input type="text" id="target" placeholder="Masukkan ID/No tujuan">
@@ -320,11 +574,9 @@
             </div>
             <div id="promo-msg" style="font-size:10px; margin-top:5px; font-weight:700"></div>
         </div>
-
         <div id="main-catalog">
             <div class="section-title">2. Select Service</div>
             <div id="area-layanan"></div>
-
             <div class="section-title">3. Select Provider</div>
             <div id="area-nominal" class="grid"></div>
         </div>
@@ -332,46 +584,39 @@
 
     <!-- KALKULATOR WR -->
     <div id="section-kalkulator" style="display:none; margin-top:20px;">
-        <div class="section-title" style="color:#10b981; border-left-color:#10b981; text-shadow:0 0 5px rgba(16,185,129,0.5);"><i class="fas fa-calculator"></i> Kalkulator WR Mobile Legends</div>
-        <div class="input-box" style="border: 1px solid rgba(16, 185, 129, 0.5); box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);">
+        <div class="section-title" style="color:#10b981; border-left-color:#10b981;"><i class="fas fa-calculator"></i> Kalkulator WR ML</div>
+        <div class="input-box" style="border: 1px solid rgba(16, 185, 129, 0.5);">
             <p style="font-size:11px; color:#94a3b8; margin-bottom:15px; margin-top:0;">Hitung berapa match yang harus Kakak menangin tanpa kalah untuk mencapai Win Rate yang diinginkan!</p>
-            
             <label style="font-size: 10px; font-weight:bold; color: #10b981;">Total Pertandingan (Match)</label>
             <input type="number" id="calc-match" placeholder="Misal: 350" style="margin-bottom: 12px; border-color: rgba(16,185,129,0.3);">
-            
             <label style="font-size: 10px; font-weight:bold; color: #10b981;">Total Win Rate Saat Ini (%)</label>
             <input type="number" id="calc-wr-now" placeholder="Misal: 55.5" style="margin-bottom: 12px; border-color: rgba(16,185,129,0.3);" step="0.1">
-            
             <label style="font-size: 10px; font-weight:bold; color: #10b981;">Target Win Rate (%)</label>
             <input type="number" id="calc-wr-target" placeholder="Misal: 70" style="margin-bottom: 15px; border-color: rgba(16,185,129,0.3);" step="0.1">
-            
-            <button onclick="hitungWR()" style="width:100%; padding:14px; background:#10b981; color:#020617; border:none; border-radius:12px; font-weight:800; cursor:pointer; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);"><i class="fas fa-bolt"></i> HITUNG</button>
-            
+            <button onclick="hitungWR()" style="width:100%; padding:14px; background:#10b981; color:#020617; border:none; border-radius:12px; font-weight:800; cursor:pointer;"><i class="fas fa-bolt"></i> HITUNG</button>
             <div id="calc-result" class="calc-result" style="display: none;"></div>
         </div>
     </div>
 
     <!-- GACHA PROMO -->
     <div id="section-spin" style="display:none; margin-top:20px;">
-        <div class="section-title" style="color:#f59e0b; border-left-color:#f59e0b; text-shadow:0 0 5px rgba(245,158,11,0.5);"><i class="fas fa-gift"></i> Daily Gacha Reward</div>
-        <div class="input-box" style="border: 1px solid rgba(245, 158, 11, 0.5); text-align: center; box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);">
+        <div class="section-title" style="color:#f59e0b; border-left-color:#f59e0b;"><i class="fas fa-gift"></i> Daily Gacha Reward</div>
+        <div class="input-box" style="border: 1px solid rgba(245, 158, 11, 0.5); text-align: center;">
             <img src="foto.jpg" alt="Gift" style="width: 120px; margin-bottom: 10px; filter: drop-shadow(0 10px 15px rgba(245,158,11,0.5));">
             <h3 style="margin:0 0 10px; color:#f59e0b;">Coba Keberuntunganmu!</h3>
             <p style="font-size:11px; color:#94a3b8; margin-bottom:15px; margin-top:0;">Gacha 1x/hari untuk dapat kode diskon spesial atau saldo gratis.</p>
-            
             <button id="btn-gacha" onclick="putarGacha()" class="gacha-btn"><i class="fas fa-sync-alt"></i> SPIN</button>
-            
-            <div id="gacha-result" class="gacha-result"></div>
+            <div id="gacha-result" class="gacha-result" style="display:none; margin-top: 20px; padding: 15px; border-radius: 15px;"></div>
         </div>
     </div>
 
     <div id="section-cek-pesanan" class="riwayat-box" style="margin-top:30px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <span style="font-size: 11px; font-weight: 800; color:var(--accent); text-shadow:0 0 5px var(--accent);"><i class="fas fa-search"></i> CEK STATUS PESANAN</span>
+            <span style="font-size: 11px; font-weight: 800; color:var(--accent); text-shadow:0 0 5px var(--accent);"><i class="fas fa-search"></i> CEK STATUS TRANSAKSI</span>
         </div>
-        <p style="font-size:10px; color:#94a3b8; margin-top:0; margin-bottom:15px;">Masukkan ID Trx / Nomer yang digunakan untuk melacak pesanan.</p>
+        <p style="font-size:10px; color:#94a3b8; margin-top:0; margin-bottom:15px;">Masukkan ID Trx untuk melacak pesanan.</p>
         <div style="display:flex; gap:8px;">
-            <input type="text" id="input-cek-order" placeholder="ID / No HP..." style="margin:0; font-size:11px; padding:10px;">
+            <input type="text" id="input-cek-order" placeholder="ID..." style="margin:0; font-size:11px; padding:10px;">
             <button class="btn-cek" onclick="cekPesanan()" style="padding:0 15px; font-size:11px;"><i class="fas fa-search"></i> LACAK</button>
         </div>
         <div id="hasil-cek-order" style="margin-top:15px; font-size:11px; display:none; padding:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:10px;"></div>
@@ -379,41 +624,11 @@
 
     <div id="riwayat-container" class="riwayat-box" style="margin-top: 15px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <span style="font-size: 11px; font-weight: 800; color:var(--accent); text-shadow:0 0 5px var(--accent);"><i class="fas fa-history"></i> RIWAYAT TERAKHIR</span>
-            <span style="font-size: 10px; color: white; cursor: pointer; font-weight:bold; background: #ef4444; padding: 4px 8px; border-radius: 5px; box-shadow:0 0 10px rgba(239,68,68,0.5);" onclick="hapusRiwayat()">HAPUS</span>
+            <span style="font-size: 11px; font-weight: 800; color:var(--accent); text-shadow:0 0 5px var(--accent);"><i class="fas fa-history"></i> RIWAYAT TRX</span>
+            <span style="font-size: 10px; color: white; cursor: pointer; font-weight:bold; background: #ef4444; padding: 4px 8px; border-radius: 5px;" onclick="hapusRiwayat()">HAPUS</span>
         </div>
         <div id="list-riwayat">
             <div style="text-align: center; opacity: 0.5; font-size: 10px; padding: 10px;">Belum ada pesanan</div>
-        </div>
-    </div>
-
-    <div id="section-faq" class="riwayat-box" style="margin-top:15px;">
-        <div style="display:flex; align-items:center; margin-bottom:15px;">
-            <span style="font-size: 11px; font-weight: 800; color:#3b82f6; text-shadow:0 0 5px rgba(59,130,246,0.5);"><i class="fas fa-info-circle"></i> FAQ & BANTUAN</span>
-        </div>
-        <!-- Kolom Horizontal Bersebelahan untuk FAQ -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 12px; border: 1px solid rgba(59,130,246,0.3); display: flex; flex-direction: column; justify-content: center; text-align: center;">
-                <i class="fas fa-headset" style="font-size: 24px; color: #60a5fa; margin-bottom: 8px;"></i>
-                <h4 style="margin: 0 0 5px; color: #60a5fa; font-size: 11px;">Butuh Bantuan?</h4>
-                <p style="font-size: 9px; color: #cbd5e1; margin-top: 0; margin-bottom: 12px;">Hubungi Admin jika ada pertanyaan.</p>
-                <button onclick="window.open('https://wa.me/6287819661875', '_blank')" style="width:100%; padding:8px; background:#3b82f6; border:none; border-radius:8px; color:white; font-weight:800; cursor:pointer; font-size:9px; box-shadow: 0 4px 10px rgba(59,130,246,0.5);"><i class="fab fa-whatsapp"></i> HUBUNGI ADMIN</button>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div style="background: rgba(59, 130, 246, 0.1); padding: 8px 10px; border-radius: 8px;">
-                    <b style="font-size:10px; color:#60a5fa;">Q: Berapa lama proses?</b>
-                    <div style="font-size:9px; margin-top:3px; color:#cbd5e1;">A: Otomatis 1-5 menit.</div>
-                </div>
-                <div style="background: rgba(59, 130, 246, 0.1); padding: 8px 10px; border-radius: 8px;">
-                    <b style="font-size:10px; color:#60a5fa;">Q: Salah input ID?</b>
-                    <div style="font-size:9px; margin-top:3px; color:#cbd5e1;">A: Tidak bisa di-refund. Mohon teliti.</div>
-                </div>
-                <div style="background: rgba(59, 130, 246, 0.1); padding: 8px 10px; border-radius: 8px;">
-                    <b style="font-size:10px; color:#60a5fa;">Q: Cara bayar?</b>
-                    <div style="font-size:9px; margin-top:3px; color:#cbd5e1;">A: Saldo Akun, QRIS, Bank, Minimarket, Cash.</div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -430,43 +645,65 @@
         </div>
         <i class="fas fa-times" onclick="toggleChat()" style="cursor:pointer; font-size: 18px;"></i>
     </div>
-    <div class="chat-b" id="chat-content">
-        </div>
+    <div class="chat-b" id="chat-content"></div>
     <div style="padding:15px; display:flex; gap:8px; background:rgba(15, 23, 42, 0.9); border-top: 1px solid rgba(255,255,255,0.05);">
-        <input type="text" id="chat-in" placeholder="Tanya apa aja Kak..." style="margin:0; font-size:12px; flex:1; border-radius: 20px; padding: 10px 15px; background:#0f172a; color:white; border:1px solid rgba(255,255,255,0.2);" onkeypress="if(event.key==='Enter') sendChat()">
+        <input type="text" id="chat-in" placeholder="..." style="margin:0; font-size:12px; flex:1; border-radius: 20px; padding: 10px 15px; background:#0f172a; color:white; border:1px solid rgba(255,255,255,0.2);" onkeypress="if(event.key==='Enter') sendChat()">
         <button onclick="sendChat()" style="background:var(--grad); border:none; border-radius:50%; width: 40px; height: 40px; color:white; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
 
 <div class="footer-bar">
     <div>
-        <span style="font-size:9px; opacity:0.6; font-weight:bold; letter-spacing: 1px;">HARGA ITEM</span>
+        <span style="font-size:9px; opacity:0.6; font-weight:bold; letter-spacing: 1px;">HARGA</span>
         <div id="total-txt" style="font-size:20px; font-weight:800; color:var(--accent); text-shadow: 0 0 15px var(--accent);">Rp 0</div>
     </div>
     <button onclick="openPaymentModal()" style="background:var(--grad); color:white; border:none; padding:12px 30px; border-radius:12px; font-weight:800; cursor:pointer; font-size: 14px; box-shadow: 0 4px 20px rgba(34,211,238,0.5);">ORDER</button>
 </div>
 
 <script>
-// --- KONFIGURASI PROMO ---
-const promoBiasa = [
-    { code: "FANZX66", disc: 0.01 }, { code: "FANZX78", disc: 0.02 },
-    { code: "FANZX19", disc: 0.03 }, { code: "FANZX18", disc: 0.04 }, { code: "FANZX75", disc: 0.05 }
-];
-const promoPremium = [
-    { code: "FANZX77", disc: 0.06 }, { code: "FANZX95", disc: 0.07 },
-    { code: "FANZX23", disc: 0.08 }, { code: "FANZX73", disc: 0.09 }, { code: "FANZX32", disc: 0.10 }
-];
-const promoPrioritas = [
-    { code: "FANZX85", disc: 0.11 }, { code: "FANZX58", disc: 0.12 },
-    { code: "FANZX98", disc: 0.13 }, { code: "FANZX52", disc: 0.14 }, { code: "FANZX79", disc: 0.15 }
-];
+// --- FITUR MAINTENANCE JS LOGIC ---
+function updateMaintenance() {
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    
+    let isMaintenance = false;
+    if (hour === 22 && minute >= 30) isMaintenance = true;
+    else if (hour > 22 || hour < 5) isMaintenance = true;
+    else if (hour === 5 && minute < 30) isMaintenance = true;
 
+    const maintBox = document.getElementById('maint-box');
+    
+    if (isMaintenance) {
+        maintBox.style.display = 'block';
+        let target = new Date();
+        if (hour >= 22) target.setDate(target.getDate() + 1);
+        target.setHours(5, 30, 0, 0);
+
+        const diff = target - now; 
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('m-jam').innerText = h.toString().padStart(2, '0');
+        document.getElementById('m-menit').innerText = m.toString().padStart(2, '0');
+        document.getElementById('m-detik').innerText = s.toString().padStart(2, '0');
+    } else {
+        maintBox.style.display = 'none';
+    }
+}
+setInterval(updateMaintenance, 1000);
+updateMaintenance();
+
+const promoBiasa = [ { code: "FANZX66", disc: 0.01 }, { code: "FANZX78", disc: 0.02 }, { code: "FANZX19", disc: 0.03 } ];
+const promoPremium = [ { code: "FANZX77", disc: 0.06 }, { code: "FANZX95", disc: 0.07 }, { code: "FANZX23", disc: 0.08 } ];
+const promoPrioritas = [ { code: "FANZX85", disc: 0.11 }, { code: "FANZX58", disc: 0.12 }, { code: "FANZX98", disc: 0.13 } ];
 const allPromos = [...promoBiasa, ...promoPremium, ...promoPrioritas];
 
-// --- DATABASE FULL SESUAI PERMINTAAN ---
+// --- PENAMBAHAN KATEGORI BARU KE DATABASE SESUAI FOTO ---
 const DB = {
-    game: {
-        ml:[["5 Diamond",1000],["12 Diamond",3500],["28 Diamond",8000],["36 Diamond",10000],["56 Diamond",15000],["85 Diamond",22500],["100 Diamond",26000],["144 Diamond",38000],["170 Diamond",45500],["240 Diamond",63000],["355 Diamond",93000],["425 Diamond",112000],["514 Diamond",132000],["712 Diamond",183000],["875 Diamond",217000],["1050 Diamond",265500],["1220 Diamond",309000],["1453 Diamond",371000],["1750 Diamond",441000],["2180 Diamond",524000],["2578 Diamond",625000],["4020 Diamond",961000],["7660 Diamond",1839000],["Weekly Diamond Pass",29500],["Twilight Pass",146500],["Starlight Mem Plus",195500]],
+  game: {
+    ml:[["5 Diamond",1000],["12 Diamond",3500],["28 Diamond",8000],["36 Diamond",10000],["56 Diamond",15000],["85 Diamond",22500],["100 Diamond",26000],["144 Diamond",38000],["170 Diamond",45500],["240 Diamond",63000],["355 Diamond",93000],["425 Diamond",112000],["514 Diamond",132000],["712 Diamond",183000],["875 Diamond",217000],["1050 Diamond",265500],["1220 Diamond",309000],["1453 Diamond",371000],["1750 Diamond",441000],["2180 Diamond",524000],["2578 Diamond",625000],["4020 Diamond",961000],["7660 Diamond",1839000],["Weekly Diamond Pass",29500],["Twilight Pass",146500],["Starlight Mem Plus",195500]],
         ff:[["5 Diamond",500],["12 Diamond",1000],["20 Diamond",3000],["30 Diamond",4000],["50 Diamond",6000],["70 Diamond",9000],["100 Diamond",13000],["140 Diamond",18000],["150 Diamond",21000],["210 Diamond",27000],["355 Diamond",48000],["425 Diamond",56000],["500 Diamond",68000],["720 Diamond",95000],["860 Diamond",112000],["1000 Diamond",135000],["1075 Diamond",145000],["1440 Diamond",190000],["1450 Diamond",192000],["2000 Diamond",260000],["2180 Diamond",285000],["3640 Diamond",470000],["7290 Diamond",930000],["Membership Mingguan",27000],["Membership Bulanan",81000],["BP Card",41500]],
         pubg:[["35 UC",15500],["50 UC",24000],["70 UC",27500],["100 UC",29500],["150 UC",45500],["210 UC",59500],["250 UC",73000],["300 UC",75500],["375 UC",91000],["500 UC",122500],["525 UC",135500],["700 UC",158000],["750 UC",173500],["1000 UC",230500],["1250 UC",350500],["1750 UC",361500],["2500 UC",509000]],
         cod:[["26 + 5 CP",5500],["53 + 9 CP",10000],["106 + 21 CP",20000],["264 + 53 CP",45500],["528 + 106 CP",94000],["1056 + 317 CP",178500],["1584 + 475 CP",211500]],
@@ -474,13 +711,7 @@ const DB = {
         aov:[["40 AOV",10500],["90 AOV",19500],["230 AOV",47500],["470 AOV",93500],["950 AOV",187500],["1430 AOV",184000],["2390 AOV",473500]],
         higgs:[["1B Chip",15000],["2B Chip",30000]]
     },
-    Voucher: {
-       Googleplay:[["10.000",12000],["20.000",22000],["50.000",53000],["100.000",105000],["300.000",315000]],
-       roblox:[["Gift Card IDR 50.000",52000],["Gift Card IDR 100.000",102000],["Gift Card IDR 200.000",205000]],
-       spotify:[["1 Bulan Individual",55000],["3 Bulan Individual",165000]],
-       netflix:[["Mobile 1 Bulan",54000],["Basic 1 Bulan",65000],["Standard 1 Bulan",120000],["Premium 1 Bulan",186000]],
-       steam:[["Steam Wallet IDR 12.000",15000],["Steam Wallet IDR 45.000",50000],["Steam Wallet IDR 90.000",99000]]
-    },
+    Voucher: { Googleplay:[["10.000",12000], ["15.000", 17000], ["20.000", 22000], ["50.000",53000], ["100.000", 103000], ["200.000", 203000], ["500.000", 504000], ["1.000.000", 1005000]], spotify:[["1 Bulan Individual",55000]], netflix:[["Mobile 1 Bulan",54000],["Premium 1 Bulan",186000]] },
     pulsa: {
         telkomsel:[["5.000",6500],["10.000",11000],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31500],["40.000",41000],["50.000",51500],["60.000",61500],["70.000",71500],["80.000",81500],["100.000",102000],["150.000",152000],["200.000",202000]],
         xl:[["5.000",6000],["10.000",11000],["15.000",16000],["25.000",26000],["30.000",31000],["40.000",41000],["50.000",51500],["70.000",71500],["80.000",81500],["100.000",102000],["150.000",152000],["200.000",202000]],
@@ -489,31 +720,51 @@ const DB = {
         tri:[["5.000",6500],["10.000",11500],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31500],["40.000",41500],["50.000",51000],["70.000",71500],["90.000",91500],["100.000",102000],["125.000",127000],["150.000",152000],["200.000",202000]],
         "by.u":[["3.000",4000],["4.000",5000],["5.000",6000],["10.000",11000],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31000],["35.000",36000],["40.000",41000],["45.000",46000],["50.000",51000],["55.000",56000],["60.000",61500],["70.000",71500],["80.000",81500],["90.000",91500],["100.000",101500],["150.000",152000],["200.000",202000]]
     },
+    PaketData: {
+        telkomsel:[["Internet OMG 10GB", 55000], ["Internet OMG 25GB", 105000]],
+        indosat:[["Freedom 15GB", 60000], ["Freedom 25GB", 90000]],
+        xl:[["Xtra Combo 10GB", 50000]]
+    },
+    PLN: {
+        Token: [["Token 20.000", 22000], ["Token 50.000", 52000], ["Token 100.000", 102000]],
+        Tagihan: [["Cek Tagihan Listrik", 2500]]
+    },
+    PDAM: {
+        Jakarta: [["Aetra", 2500], ["Palyja", 2500]],
+        Jawa: [["PDAM Semarang", 2500], ["PDAM Surabaya", 2500]]
+    },
+    Cicilan: {
+        FIF: [["Bayar Angsuran FIF", 2500]],
+        Adira: [["Bayar Angsuran Adira", 2500]]
+    },
     wallet: {
-        dana:[["1.000",1500],["2.000",2500],["3.000",3500],["4.000",4500],["5.000",5500],["10.000",11000],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31000],["40.000",41000],["50.000",52000],["60.000",62000],["70.000",72000],["80K",82500],["90K",92500],["100.000",103000],["125.000",128000],["150.000",153000],["200.000",203000]],
+        dana:[["1.000",1500],["2.000",2500],["3.000",3500],["4.000",4500],["5.000",5500],["10.000",11000],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31000],["40.000",41000],["50.000",52000],["60.000",62000],["70.000",72000],["80.000",82500],["90.000",92500],["100.000",103000],["125.000",128000],["150.000",153000],["200.000",203000]],
         ovo:[["10.000",11000],["15.000",16000],["20.000",21000],["25.000",26000],["30.000",31000],["35.000",36000],["40.000",41000],["45.000",46000],["50.000",51500],["55.000",56500],["60.000",61500],["65.000",66500],["70.000",71500],["75.000",76500],["80.000",81500],["85.000",86500],["90.000",91500],["95.000",96500],["100.000",102500],["125.000",127500],["150.000",152500],["200.000",202500]],
         gopay:[["1.000",1500],["2.000",2500],["3.000",3500],["4.000",4500],["5.000",5500],["10.000",11500],["15.000",16500],["20.000",21500],["25.000",26500],["30.000",31500],["40.000",41500],["50.000",51500],["60.000",61500],["70.000",71500],["80.000",82000],["90.000",92000],["100.000",102000],["125.000",127000],["150.000",152000],["200.000",202000]],
         shopeepay:[["10.000",11500],["15.000",16500],["20.000",21500],["25.000",26500],["30.000",31500],["40.000",41500],["50.000",51500],["60.000",61500],["70.000",71500],["80.000",81500],["90.000",91500],["100.000",102500],["125.000",127500],["150.000",152500],["200.000",202000]],
-        Linkaja:[["10.000",11500],["15.000",16500],["20.000",21500],["25.000",26500],["30.000",31500],["35.000",36500],["40.000",41500],["45.000",46500],["50.000",51500],["55.000",56500],["60.000",61500],["65.000",66500],["70.000",71500],["80.000",81500],["90.000",91500],["100.000",101500],["125.000",126500]]
-      }
-  };
+        Linkaja:[["10.000",11500],["15.000",16500],["20.000",21500],["25.000",26500],["30.000",31500],["35.000",36500],["40.000",41500],["45.000",46500],["50.000",51500],["55.000",56500],["60.000",61500],["65.000",66500],["70.000",71500],["80.000",81500],["90.000",91500],["100.000",101500],["125.000",126500]] }
+};
 
 let price = 0, fee = 0, game = "", item = "", pay = "", disc = 1;
+let currentNotifTab = 'unread'; // Fitur Notifikasi Tab
 
-// --- AUTH & PROFILE SYSTEM ---
+function getTierInfo(trxCount) {
+    if (trxCount >= 250) return { name: "VVIP", color: "#eab308", next: null, max: 400, disc: 0.10, icon: "fa-crown" }; 
+    if (trxCount >= 150) return { name: "VIP", color: "#a855f7", next: 250, max: 250, disc: 0.05, icon: "fa-gem" }; 
+    if (trxCount >= 50) return { name: "RESELLER", color: "#3b82f6", next: 150, max: 150, disc: 0.02, icon: "fa-star" }; 
+    return { name: "MEMBER", color: "#94a3b8", next: 149, max: 149, disc: 0, icon: "fa-user" }; 
+}
+
 function checkLogin() {
     const activeUser = localStorage.getItem('mf_logged_in');
     if (activeUser) {
         let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
-        // Inject saldo awal jika user lama tidak punya data saldo
-        if(users[activeUser] && users[activeUser].saldo === undefined) {
-            users[activeUser].saldo = 250000;
-            localStorage.setItem('mf_users', JSON.stringify(users));
-        }
+        if(users[activeUser] && users[activeUser].saldo === undefined) { users[activeUser].saldo = 0; localStorage.setItem('mf_users', JSON.stringify(users)); }
         document.getElementById('auth-overlay').style.display = 'none';
         document.getElementById('user-display').innerText = activeUser;
         injectWelcomeAI(activeUser);
         muatRiwayat();
+        updateNotifBadge(); // Update Badge
     } else {
         document.getElementById('auth-overlay').style.display = 'flex';
     }
@@ -523,32 +774,23 @@ function switchAuth(type) {
     const tLog = document.getElementById('tab-login'), tReg = document.getElementById('tab-register');
     const fLog = document.getElementById('form-login'), fReg = document.getElementById('form-register');
     if (type === 'login') {
-        tLog.style.background = 'var(--grad)'; tLog.style.color = 'white'; tLog.style.boxShadow = '0 0 10px rgba(34,211,238,0.4)';
-        tReg.style.background = 'transparent'; tReg.style.color = '#94a3b8'; tReg.style.boxShadow = 'none';
+        tLog.style.background = 'var(--grad)'; tLog.style.color = 'white'; tReg.style.background = 'transparent'; tReg.style.color = '#94a3b8';
         fLog.style.display = 'block'; fReg.style.display = 'none';
     } else {
-        tReg.style.background = 'var(--grad)'; tReg.style.color = 'white'; tReg.style.boxShadow = '0 0 10px rgba(34,211,238,0.4)';
-        tLog.style.background = 'transparent'; tLog.style.color = '#94a3b8'; tLog.style.boxShadow = 'none';
+        tReg.style.background = 'var(--grad)'; tReg.style.color = 'white'; tLog.style.background = 'transparent'; tLog.style.color = '#94a3b8';
         fReg.style.display = 'block'; fLog.style.display = 'none';
     }
 }
 
 function togglePass(id, icon) {
     const el = document.getElementById(id);
-    if (el.type === 'password') {
-        el.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash');
-    } else {
-        el.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye');
-    }
+    if (el.type === 'password') { el.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash'); } else { el.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
 }
 
 function handleRegister() {
-    const user = document.getElementById('r-user').value.trim();
-    const wa = document.getElementById('r-wa').value.trim();
-    const pass = document.getElementById('r-pass').value;
-    const terms = document.getElementById('r-terms').checked;
-
-    if (!user || !wa || !pass) return alert('Semua kolom wajib diisi!');
+    const user = document.getElementById('r-user').value.trim(), email = document.getElementById('r-email').value.trim(), wa = document.getElementById('r-wa').value.trim(), pass = document.getElementById('r-pass').value, terms = document.getElementById('r-terms').checked;
+    if (!user || !email || !wa || !pass) return alert('Semua kolom wajib diisi!');
+    if (!email.includes('@')) return alert('Format email tidak valid!');
     if (user.length < 4) return alert('Username minimal 4 karakter!');
     if (pass.length < 6) return alert('Password minimal 6 karakter!');
     if (!terms) return alert('Anda harus menyetujui Syarat & Ketentuan!');
@@ -556,32 +798,18 @@ function handleRegister() {
     let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
     if (users[user]) return alert('Username sudah terdaftar! Silakan pilih yang lain.');
 
-    // Menambahkan saldo demo Rp 250.000 otomatis untuk member baru
-    users[user] = { wa: wa, pass: pass, saldo: 250000, trx: 0, avatar: '' };
+    users[user] = { email: email, wa: wa, pass: pass, saldo: 0, trx: 0, avatar: '', uid: 'U' + Math.random().toString(36).substr(2, 4).toUpperCase(), token: Math.random().toString(36).substr(2, 14) + Date.now().toString(36).substr(0,4) };
     localStorage.setItem('mf_users', JSON.stringify(users));
-    
-    alert('Pendaftaran berhasil! Saldo demo 250.000 telah masuk. Silakan login.');
-    switchAuth('login');
+    alert('Registrasi berhasil! Silakan login.'); switchAuth('login');
 }
 
 function handleLogin() {
-    const user = document.getElementById('l-user').value.trim();
-    const pass = document.getElementById('l-pass').value;
-
+    const user = document.getElementById('l-user').value.trim(), pass = document.getElementById('l-pass').value;
     let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
-    if (users[user] && users[user].pass === pass) {
-        localStorage.setItem('mf_logged_in', user);
-        checkLogin();
-    } else {
-        alert('Username atau Password salah!');
-    }
+    if (users[user] && users[user].pass === pass) { localStorage.setItem('mf_logged_in', user); checkLogin(); } else { alert('Username atau Password salah!'); }
 }
 
-function handleLogout() { 
-    localStorage.removeItem('mf_logged_in'); 
-    closeModal('profile-modal');
-    location.reload(); 
-}
+function handleLogout() { localStorage.removeItem('mf_logged_in'); location.reload(); }
 
 function openProfile() {
     const activeUser = localStorage.getItem('mf_logged_in');
@@ -590,498 +818,458 @@ function openProfile() {
     let uData = users[activeUser];
 
     if(uData.avatar) {
-        document.getElementById('prof-img').src = uData.avatar;
-        document.getElementById('prof-img').style.display = 'block';
-        document.getElementById('prof-avatar').style.display = 'none';
+        document.getElementById('prof-img').src = uData.avatar; document.getElementById('prof-img').style.display = 'block'; document.getElementById('prof-avatar').style.display = 'none';
     } else {
-        document.getElementById('prof-img').style.display = 'none';
-        document.getElementById('prof-avatar').style.display = 'flex';
-        document.getElementById('prof-avatar').innerText = activeUser.charAt(0).toUpperCase();
+        document.getElementById('prof-img').style.display = 'none'; document.getElementById('prof-avatar').style.display = 'flex'; document.getElementById('prof-avatar').innerText = activeUser.charAt(0).toUpperCase();
     }
 
+    let userEmail = uData.email || (activeUser.toLowerCase().replace(/\s/g, '') + '@gmail.com');
+    let tInfo = getTierInfo(uData.trx || 0);
+    
+    document.getElementById('prof-tipe-val').innerText = tInfo.name;
+    document.getElementById('prof-tipe-val').style.color = tInfo.color;
+    let topLabel = document.getElementById('prof-top-tier-label');
+    topLabel.innerHTML = `<i class="fas ${tInfo.icon}"></i> ${tInfo.name}`;
+    if(tInfo.name === "VVIP" || tInfo.name === "VIP") topLabel.style.background = `linear-gradient(45deg, ${tInfo.color}, #000)`; else topLabel.style.background = tInfo.color;
+
     document.getElementById('prof-name').innerText = activeUser;
-    document.getElementById('prof-wa').innerText = uData.wa;
-    document.getElementById('prof-trx').innerText = uData.trx || 0;
+    document.getElementById('prof-nama-val').innerText = activeUser;
+    document.getElementById('prof-email-val').innerText = userEmail;
+    document.getElementById('prof-wa-val').innerText = uData.wa;
+    document.getElementById('prof-id-val').innerText = uData.uid;
+    document.getElementById('prof-token-val').innerText = uData.token;
     document.getElementById('prof-saldo').innerText = `Rp ${(uData.saldo || 0).toLocaleString('id-ID')}`;
     
+    // Set N-Koin & Referral sesuai desain foto baru
+    document.getElementById('prof-koin-val').innerText = ((uData.trx || 0) * 2).toLocaleString('id-ID'); // Simulasi koin
+    document.getElementById('prof-ref-val').innerText = 'FANZX' + uData.uid;
+
     document.getElementById('profile-modal').style.display = 'flex';
 }
 
 function changeAvatar() {
-    let url = prompt("Masukkan URL Foto (Link Image) untuk Profil Anda:");
-    if(url) {
-        const activeUser = localStorage.getItem('mf_logged_in');
-        let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
-        users[activeUser].avatar = url;
-        localStorage.setItem('mf_users', JSON.stringify(users));
-        openProfile(); 
-    }
+    let fileInput = document.createElement('input'); fileInput.type = 'file'; fileInput.accept = 'image/*';
+    fileInput.onchange = function(event) {
+        let file = event.target.files[0];
+        if (file) {
+            if (file.size > 3000000) return alert("Ukuran gambar terlalu besar! Maksimal 3MB ya Kak.");
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let base64Image = e.target.result; 
+                let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
+                users[localStorage.getItem('mf_logged_in')].avatar = base64Image;
+                localStorage.setItem('mf_users', JSON.stringify(users)); openProfile(); 
+            };
+            reader.readAsDataURL(file); 
+        }
+    };
+    fileInput.click();
 }
 
-// --- NAV & LAYOUT ---
+function openTierModal() {
+    const activeUser = localStorage.getItem('mf_logged_in');
+    let trx = JSON.parse(localStorage.getItem('mf_users') || '{}')[activeUser].trx || 0;
+    let tInfo = getTierInfo(trx);
+
+    document.getElementById('tier-title-display').innerText = tInfo.name;
+    document.getElementById('tier-trx-display').innerHTML = `${trx} <span style="font-size: 12px; font-weight: normal; color: #94a3b8;">Trx</span>`;
+    
+    let headerBg = document.getElementById('tier-header-bg');
+    if (tInfo.name === "MEMBER") headerBg.style.background = "linear-gradient(135deg, #64748b, #94a3b8)";
+    else if (tInfo.name === "RESELLER") headerBg.style.background = "linear-gradient(135deg, #2563eb, #3b82f6)";
+    else if (tInfo.name === "VIP") headerBg.style.background = "linear-gradient(135deg, #7e22ce, #a855f7)";
+    else headerBg.style.background = "linear-gradient(135deg, #ca8a04, #eab308)";
+
+    let percent = 100, nextMsg = "Max Level Reached! 🔥";
+    if (tInfo.next) { percent = (trx / tInfo.next) * 100; nextMsg = `Butuh ${tInfo.next - trx} Trx lagi ke level selanjutnya`; }
+    document.getElementById('tier-progress-bar').style.width = percent + "%";
+    document.getElementById('tier-progress-bar').style.background = tInfo.color;
+    document.getElementById('tier-next-target').innerText = nextMsg;
+    closeModal('profile-modal'); document.getElementById('tier-modal').style.display = 'flex';
+}
+
+function openTopUpModal() {
+    closeModal('profile-modal'); document.getElementById('topup-modal').style.display = 'flex';
+    document.getElementById('topup-amount').value = ''; document.getElementById('topup-qris-area').style.display = 'none';
+    document.getElementById('btn-lanjut-topup').style.display = 'block'; document.getElementById('btn-konfirm-topup').style.display = 'none';
+}
+
+function showTopupQris() {
+    let nominal = parseInt(document.getElementById('topup-amount').value);
+    if(isNaN(nominal) || nominal < 5000) return alert('Minimal top up saldo adalah Rp 5.000!');
+    document.getElementById('topup-total-show').innerText = 'Rp ' + (nominal + 500).toLocaleString('id-ID');
+    document.getElementById('topup-qris-area').style.display = 'block';
+    document.getElementById('btn-lanjut-topup').style.display = 'none'; document.getElementById('btn-konfirm-topup').style.display = 'block';
+}
+
+function confirmTopup() {
+    let nominal = parseInt(document.getElementById('topup-amount').value);
+    const activeUser = localStorage.getItem('mf_logged_in'); let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
+    if(users[activeUser]) { users[activeUser].saldo = (users[activeUser].saldo || 0) + nominal; localStorage.setItem('mf_users', JSON.stringify(users)); }
+    alert('✅ Saldo Rp ' + nominal.toLocaleString('id-ID') + ' telah ditambahkan.'); closeModal('topup-modal'); openProfile(); 
+}
+
 function pilihK(k, el) {
     document.querySelectorAll('.nav-box').forEach(b => { 
-        b.classList.remove('active'); 
-        b.style.boxShadow = 'none'; 
-        b.style.borderColor = 'rgba(255,255,255,0.05)';
+        b.classList.remove('active'); b.style.boxShadow = 'none'; b.style.borderColor = 'rgba(255,255,255,0.05)';
         if(b.innerHTML.includes('Kalkulator')) { b.style.background='rgba(16, 185, 129, 0.2)'; b.style.color='#10b981'; b.style.borderColor='#10b981'; }
         if(b.innerHTML.includes('Gacha')) { b.style.background='rgba(245, 158, 11, 0.2)'; b.style.color='#f59e0b'; b.style.borderColor='#f59e0b'; }
     });
-    el.classList.add('active');
-    el.style.boxShadow = '0 0 15px rgba(14, 165, 233, 0.4)';
-
-    if(k === 'kalkulator' || k === 'spin') {
-        el.style.background = 'var(--grad)'; el.style.color = 'white'; el.style.borderColor = 'rgba(255,255,255,0.2)';
-    }
+    el.classList.add('active'); el.style.boxShadow = '0 0 15px rgba(14, 165, 233, 0.4)';
+    if(k === 'kalkulator' || k === 'spin') { el.style.background = 'var(--grad)'; el.style.color = 'white'; el.style.borderColor = 'rgba(255,255,255,0.2)'; }
     
-    document.getElementById('section-main-order').style.display = 'none';
-    document.getElementById('section-kalkulator').style.display = 'none';
-    document.getElementById('section-spin').style.display = 'none';
+    document.getElementById('section-main-order').style.display = 'none'; document.getElementById('section-kalkulator').style.display = 'none'; document.getElementById('section-spin').style.display = 'none';
     
-    if (k === 'kalkulator') {
-        document.getElementById('section-kalkulator').style.display = 'block';
-    } else if (k === 'spin') {
-        document.getElementById('section-spin').style.display = 'block';
-    } else {
+    if (k === 'kalkulator') document.getElementById('section-kalkulator').style.display = 'block';
+    else if (k === 'spin') document.getElementById('section-spin').style.display = 'block';
+    else {
         document.getElementById('section-main-order').style.display = 'block';
-        
         let h = "";
         if(DB[k]) {
-            Object.keys(DB[k]).forEach((l, i) => {
-                h += `<div class="layanan-item ${i===0?'active':''}" onclick="setPilih(this, '${k}', '${l}')">${l.toUpperCase()}</div>`;
-            });
-            document.getElementById('area-layanan').innerHTML = h;
-            setPilih(document.querySelector('.layanan-item'), k, Object.keys(DB[k])[0]);
+            Object.keys(DB[k]).forEach((l, i) => { h += `<div class="layanan-item ${i===0?'active':''}" onclick="setPilih(this, '${k}', '${l}')">${l.toUpperCase()}</div>`; });
+            document.getElementById('area-layanan').innerHTML = h; setPilih(document.querySelector('.layanan-item'), k, Object.keys(DB[k])[0]);
         }
     }
 }
 
 function setPilih(el, c, l) {
     document.querySelectorAll('.layanan-item').forEach(b => { b.classList.remove('active'); b.style.boxShadow = 'none'; b.style.borderColor = 'rgba(255,255,255,0.05)'; });
-    el.classList.add('active'); 
-    el.style.boxShadow = '0 0 10px rgba(14, 165, 233, 0.3)';
-    game = l.toUpperCase();
-    
+    el.classList.add('active'); el.style.boxShadow = '0 0 10px rgba(14, 165, 233, 0.3)'; game = l.toUpperCase();
     let h = "";
-    DB[c][l].forEach(d => {
-        h += `<div class="card" onclick="setItem('${d[0]}', ${d[1]}, this)">
-                <div style="font-size:11px; font-weight:800">${d[0]}</div>
-                <div class="price">Rp ${d[1].toLocaleString('id-ID')}</div>
-              </div>`;
-    });
+    DB[c][l].forEach(d => { h += `<div class="card" onclick="setItem('${d[0]}', ${d[1]}, this)"><div style="font-size:11px; font-weight:800">${d[0]}</div><div class="price">Rp ${d[1].toLocaleString('id-ID')}</div></div>`; });
     document.getElementById('area-nominal').innerHTML = h;
 }
 
-function setItem(n, p, el) {
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected'); item = n; price = p; hitung();
-}
+function setItem(n, p, el) { document.querySelectorAll('.card').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); item = n; price = p; hitung(); }
 
 function hitung() {
-    let t = (price * disc); // Belum ditambah fee dari payment karena belum milih payment
-    document.getElementById('total-txt').innerText = t > 0 ? "Rp " + t.toLocaleString('id-ID') : "Rp 0";
+    const activeUser = localStorage.getItem('mf_logged_in'); let tierDisc = 0;
+    if(activeUser) tierDisc = getTierInfo(JSON.parse(localStorage.getItem('mf_users') || '{}')[activeUser].trx || 0).disc;
+    let finalDisc = disc - tierDisc; if (finalDisc < 0.1) finalDisc = 0.1; 
+    let t = (price * finalDisc); document.getElementById('total-txt').innerText = t > 0 ? "Rp " + Math.round(t).toLocaleString('id-ID') : "Rp 0";
 }
 
 function cekPromo() {
-    const p = document.getElementById('promo').value.toUpperCase();
-    const msg = document.getElementById('promo-msg');
+    const p = document.getElementById('promo').value.toUpperCase(); const msg = document.getElementById('promo-msg');
     const foundPromo = allPromos.find(pr => pr.code === p);
-    
-    if (foundPromo) {
-        disc = 1 - foundPromo.disc; 
-        msg.innerText = `✅ Promo ${foundPromo.disc * 100}% Berhasil!`; msg.style.color = '#10b981';
-    } else {
-        disc = 1; msg.innerText = "❌ Kode Promo Tidak Valid"; msg.style.color = '#ef4444';
-    }
+    if (foundPromo) { disc = 1 - foundPromo.disc; msg.innerText = `✅ Promo ${foundPromo.disc * 100}% Berhasil!`; msg.style.color = '#10b981'; } 
+    else { disc = 1; msg.innerText = "❌ Kode Promo Tidak Valid"; msg.style.color = '#ef4444'; }
     hitung();
 }
 
-// --- POP-UP PAYMENT LOGIC ---
 function openPaymentModal() {
     const tgt = document.getElementById('target').value;
-    if(!tgt) return alert('Tujuan (ID/No HP) belum diisi!');
-    if(!item) return alert('Pilih Item / Nominal topup dulu!');
-
-    document.getElementById('order-modal').style.display = 'flex';
-    document.getElementById('payment-selection').style.display = 'block';
-    document.getElementById('specific-payment-container').style.display = 'none';
-    document.getElementById('btn-confirm').style.display = 'none';
-    
-    // Reset form payment lama
-    document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
-    pay = ""; fee = 0;
+    if(!tgt) return alert('Tujuan (ID/No HP) belum diisi!'); if(!item) return alert('Pilih Item / Nominal topup dulu!');
+    document.getElementById('order-modal').style.display = 'flex'; document.getElementById('payment-selection').style.display = 'block';
+    document.getElementById('specific-payment-container').style.display = 'none'; document.getElementById('btn-confirm').style.display = 'none';
+    document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected')); pay = ""; fee = 0;
 }
 
 function selectPayModal(method, feeAmount, el) {
-    document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    pay = method; fee = feeAmount;
-
-    setTimeout(() => {
-        document.getElementById('payment-selection').style.display = 'none';
-        generatePaymentDetail();
-    }, 300);
+    document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); pay = method; fee = feeAmount;
+    setTimeout(() => { document.getElementById('payment-selection').style.display = 'none'; generatePaymentDetail(); }, 300);
 }
 
 function generatePaymentDetail() {
     document.getElementById('specific-payment-container').style.display = 'block';
-    
-    // Sembunyikan semua konten spesifik dulu
-    document.getElementById('bank-container').style.display = 'none';
-    document.getElementById('minimart-container').style.display = 'none';
-    document.getElementById('qr-container').style.display = 'none';
-    document.getElementById('cash-options').style.display = 'none';
+    document.getElementById('bank-container').style.display = 'none'; document.getElementById('minimart-container').style.display = 'none';
+    document.getElementById('qr-container').style.display = 'none'; document.getElementById('cash-options').style.display = 'none';
 
-    if(pay === 'ALL BANK') {
-        document.getElementById('bank-container').style.display = 'block';
-        document.getElementById('bank-provider').value = "";
-        document.getElementById('bank-instructions').innerHTML = "";
-    } 
-    else if(pay === 'ALFAMART' || pay === 'INDOMART') {
-        document.getElementById('minimart-container').style.display = 'block';
-        document.getElementById('minimart-title').innerText = `KODE BAYAR ${pay}`;
-        let kodeUnik = pay === 'ALFAMART' ? 'ALFA' : 'INDO';
-        kodeUnik += Math.floor(Math.random() * 10000000000);
-        document.getElementById('minimart-code').innerText = kodeUnik;
-    }
-    else if(pay === 'QRIS') {
-        document.getElementById('qr-container').style.display = 'block';
-    }
-    else if(pay === 'CASH') {
-        document.getElementById('cash-options').style.display = 'block';
-    }
+    if(pay === 'ALL BANK') { document.getElementById('bank-container').style.display = 'block'; document.getElementById('bank-provider').value = ""; document.getElementById('bank-instructions').innerHTML = ""; } 
+    else if(pay === 'ALFAMART' || pay === 'INDOMART') { document.getElementById('minimart-container').style.display = 'block'; document.getElementById('minimart-title').innerText = `KODE BAYAR ${pay}`; document.getElementById('minimart-code').innerText = (pay === 'ALFAMART' ? 'ALFA' : 'INDO') + Math.floor(Math.random() * 10000000000); }
+    else if(pay === 'QRIS') { document.getElementById('qr-container').style.display = 'block'; }
+    else if(pay === 'CASH') { document.getElementById('cash-options').style.display = 'block'; }
 
-    // Tampilkan Rincian Belanja
-    const tgt = document.getElementById('target').value;
-    const total = (price * disc) + fee;
+    const activeUser = localStorage.getItem('mf_logged_in'); let tierDisc = 0;
+    if(activeUser) tierDisc = getTierInfo(JSON.parse(localStorage.getItem('mf_users') || '{}')[activeUser].trx || 0).disc;
+    const total = Math.round(price * (disc - tierDisc)) + fee;
     
-    let det = `
-        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;">
-            <span style="color:#94a3b8;">Layanan:</span> <strong style="color:white; text-align:right;">${game}</strong>
-        </div>
-        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;">
-            <span style="color:#94a3b8;">ID Tujuan:</span> <strong style="color:white; text-align:right;">${tgt}</strong>
-        </div>
-        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;">
-            <span style="color:#94a3b8;">Metode:</span> <strong style="color:var(--accent); text-align:right;">${pay}</strong>
-        </div>
-        <div style="display:flex; justify-content:space-between; background:rgba(34,211,238,0.15); padding:12px; border-radius:10px; border:1px solid var(--accent); box-shadow:0 0 10px rgba(34,211,238,0.2);">
-            <span style="color:var(--accent); font-weight:800;">TOTAL TAGIHAN:</span> <strong style="color:var(--accent); font-size:16px;">Rp ${total.toLocaleString('id-ID')}</strong>
-        </div>
-    `;
-    document.getElementById('modal-detail').innerHTML = det;
+    document.getElementById('modal-detail').innerHTML = `
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;"><span style="color:#94a3b8;">Layanan:</span> <strong style="color:white;">${game}</strong></div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;"><span style="color:#94a3b8;">ID Tujuan:</span> <strong style="color:white;">${document.getElementById('target').value}</strong></div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:10px;"><span style="color:#94a3b8;">Metode:</span> <strong style="color:var(--accent);">${pay}</strong></div>
+        <div style="display:flex; justify-content:space-between; background:rgba(34,211,238,0.15); padding:12px; border-radius:10px; border:1px solid var(--accent);"><span style="color:var(--accent); font-weight:800;">TOTAL TAGIHAN:</span> <strong style="color:var(--accent); font-size:16px;">Rp ${total.toLocaleString('id-ID')}</strong></div>`;
     document.getElementById('btn-confirm').style.display = 'block';
 }
 
 function showBankInstruction() {
-    const b = document.getElementById('bank-provider').value;
-    const inst = document.getElementById('bank-instructions');
+    const b = document.getElementById('bank-provider').value; const inst = document.getElementById('bank-instructions');
     if(!b) { inst.innerHTML = ''; return; }
-    
-    // Data Bank Owner
-    const banks = {
-        'bca': { rek: '3901 087819661875', name: 'faizrizky56' },
-        'mandiri': { rek: '89508 087819661875', name: 'faizrizky56' },
-        'bri': { rek: '88810 087819661875', name: 'faizrizky56' },
-        'bni': { rek: '8810 087819661875', name: 'Faizrizky56' }
-    };
-    
-    inst.innerHTML = `
-        <div style="margin-top:15px; background:rgba(0,0,0,0.3); padding:15px; border-radius:10px; text-align:center;">
-            <p style="font-size:10px; color:#94a3b8; margin:0 0 5px 0;">Silakan transfer ke rekening:</p>
-            <b style="color:var(--accent); font-size:18px; letter-spacing:1px; display:block; margin-bottom:5px;">${banks[b].rek}</b>
-            <p style="font-size:11px; font-weight:bold; color:white; margin:0;">A.N: ${banks[b].name}</p>
-        </div>
-    `;
+    const banks = { 'bca': { rek: '3901 087819661875', name: 'faizrizky56' }, 'mandiri': { rek: '89508 087819661875', name: 'faizrizky56' }, 'bri': { rek: '88810 087819661875', name: 'faizrizky56' }, 'bni': { rek: '8810 087819661875', name: 'Faizrizky56' } };
+    inst.innerHTML = `<div style="margin-top:15px; background:rgba(0,0,0,0.3); padding:15px; border-radius:10px; text-align:center;"><p style="font-size:10px; color:#94a3b8; margin:0 0 5px 0;">Silakan transfer ke rekening:</p><b style="color:var(--accent); font-size:18px; letter-spacing:1px; display:block; margin-bottom:5px;">${banks[b].rek}</b><p style="font-size:11px; font-weight:bold; color:white; margin:0;">A.N: ${banks[b].name}</p></div>`;
 }
 
-function setCashPas() { document.getElementById('custom-cash').value = (price * disc) + fee; }
+function setCashPas() { 
+    const activeUser = localStorage.getItem('mf_logged_in'); let tierDisc = activeUser ? getTierInfo(JSON.parse(localStorage.getItem('mf_users'))[activeUser].trx || 0).disc : 0;
+    document.getElementById('custom-cash').value = Math.round(price * (disc - tierDisc)) + fee; 
+}
 function setCash(nominal) { document.getElementById('custom-cash').value = nominal; }
 
-// --- KONFIRMASI & POTONG SALDO ---
-function confirmOrder() {
-    let t = (price * disc) + fee;
-    
-    if (pay === 'ALL BANK' && !document.getElementById('bank-provider').value) {
-        return alert('Silakan pilih provider Bank terlebih dahulu!');
-    }
-    if (pay === 'CASH') {
-        const cashBayar = parseInt(document.getElementById('custom-cash').value);
-        if (!cashBayar || cashBayar < t) return alert('Nominal uang pas/cash kurang dari total bayar!');
-    }
+// --- NOTIFIKASI SYSTEM LOGIC ---
+function addNotif(user, title, desc, inv = null) {
+    let notifs = JSON.parse(localStorage.getItem('mf_notifs') || '[]');
+    notifs.unshift({ id: 'N' + Date.now() + Math.floor(Math.random()*100), user: user, title: title, desc: desc, read: false, timestamp: Date.now(), inv: inv });
+    localStorage.setItem('mf_notifs', JSON.stringify(notifs)); updateNotifBadge();
+}
 
+function updateNotifBadge() {
+    const activeUser = localStorage.getItem('mf_logged_in'); if(!activeUser) return;
+    let notifs = JSON.parse(localStorage.getItem('mf_notifs') || '[]');
+    let unreadCount = notifs.filter(n => n.user === activeUser && !n.read).length;
+    let dot = document.getElementById('notif-badge'); let icon = document.querySelector('.notif-wrapper .fa-bell');
+    if(unreadCount > 0) { dot.style.display = 'block'; icon.style.color = '#ef4444'; } else { dot.style.display = 'none'; icon.style.color = 'var(--text)'; }
+}
+
+function openNotif() { document.getElementById('notif-modal').style.display = 'flex'; renderNotif(); }
+
+function switchNotifTab(tab) {
+    currentNotifTab = tab;
+    const tUnread = document.getElementById('tab-notif-unread'); const tRead = document.getElementById('tab-notif-read');
+    if(tab === 'unread') {
+        tUnread.style.color = 'var(--accent)'; tUnread.style.borderBottom = '2px solid var(--accent)';
+        tRead.style.color = '#94a3b8'; tRead.style.borderBottom = '2px solid transparent';
+    } else {
+        tRead.style.color = 'var(--accent)'; tRead.style.borderBottom = '2px solid var(--accent)';
+        tUnread.style.color = '#94a3b8'; tUnread.style.borderBottom = '2px solid transparent';
+    }
+    renderNotif();
+}
+
+function renderNotif() {
+    const activeUser = localStorage.getItem('mf_logged_in') || 'Guest';
+    let notifs = JSON.parse(localStorage.getItem('mf_notifs') || '[]');
+    let userNotifs = notifs.filter(n => n.user === activeUser && (currentNotifTab === 'unread' ? !n.read : n.read));
+    
+    let h = "";
+    if(userNotifs.length === 0) {
+        h = `<div style="text-align: center; opacity: 0.5; font-size: 11px; padding: 20px; color: #94a3b8;">Belum ada notifikasi</div>`;
+    } else {
+        userNotifs.forEach(n => {
+            let invClick = n.inv ? `'${n.inv}'` : 'null';
+            h += `
+            <div onclick="markRead('${n.id}', ${invClick})" style="background: var(--card); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; gap: 15px; align-items: center; cursor: pointer; transition: 0.3s;">
+                <div style="background: rgba(245, 158, 11, 0.1); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-envelope" style="color: #f59e0b; font-size: 18px;"></i>
+                </div>
+                <div>
+                    <div style="font-size: 12px; font-weight: 800; color: white; margin-bottom: 3px;">${n.title}</div>
+                    <div style="font-size: 10px; color: #94a3b8; line-height: 1.4;">${n.desc}</div>
+                </div>
+            </div>`;
+        });
+    }
+    document.getElementById('notif-content').innerHTML = h;
+}
+
+function markRead(id, inv) {
+    let notifs = JSON.parse(localStorage.getItem('mf_notifs') || '[]');
+    let idx = notifs.findIndex(n => n.id === id);
+    if(idx !== -1) { notifs[idx].read = true; localStorage.setItem('mf_notifs', JSON.stringify(notifs)); if (currentNotifTab === 'unread') renderNotif(); updateNotifBadge(); }
+    
+    // Buka Detail Trx jika notif bersumber dari orderan
+    if(inv && inv !== 'null') { closeModal('notif-modal'); openDetailTrx(inv); }
+}
+
+function clearNotif() {
+    if(confirm("Hapus semua notifikasi?")) {
+        const activeUser = localStorage.getItem('mf_logged_in') || 'Guest';
+        let notifs = JSON.parse(localStorage.getItem('mf_notifs') || '[]');
+        notifs = notifs.filter(n => n.user !== activeUser);
+        localStorage.setItem('mf_notifs', JSON.stringify(notifs)); renderNotif(); updateNotifBadge();
+    }
+}
+
+// --- ORDER & TRANSACTION LOGIC ---
+function confirmOrder() {
     const activeUser = localStorage.getItem('mf_logged_in');
     let users = JSON.parse(localStorage.getItem('mf_users') || '{}');
+    let tierDisc = activeUser ? getTierInfo(users[activeUser].trx || 0).disc : 0;
+    let t = Math.round(price * (disc - tierDisc)) + fee;
     
+    if (pay === 'ALL BANK' && !document.getElementById('bank-provider').value) return alert('Silakan pilih provider Bank terlebih dahulu!');
+    if (pay === 'CASH') { const cashBayar = parseInt(document.getElementById('custom-cash').value); if (!cashBayar || cashBayar < t) return alert('Nominal uang pas/cash kurang dari total bayar!'); }
+
     if (users[activeUser]) {
-        // PERBAIKAN: Hanya cek dan potong saldo JIKA metode pembayarannya "SALDO AKUN"
         if (pay === 'SALDO AKUN') {
-            if(users[activeUser].saldo >= t) {
-                users[activeUser].saldo -= t;
-            } else {
-                return alert('Saldo Akun Demo Anda tidak mencukupi untuk melakukan transaksi ini!');
-            }
+            if(users[activeUser].saldo >= t) users[activeUser].saldo -= t;
+            else return alert('Saldo anda tidak cukup untuk melakukan transaksi ini! Silakan isi saldo terlebih dahulu.');
         }
-        
-        users[activeUser].trx = (users[activeUser].trx || 0) + 1;
-        localStorage.setItem('mf_users', JSON.stringify(users));
+        users[activeUser].trx = (users[activeUser].trx || 0) + 1; localStorage.setItem('mf_users', JSON.stringify(users));
     }
 
     const tgt = document.getElementById('target').value;
     const inv = "INV-" + Math.floor(Math.random() * 900000 + 100000);
     const date = new Date().toLocaleString('id-ID');
-
+    
     simpanRiwayat(inv, game, item, t, date, pay, tgt);
+    
+    // Push Notif ke User
+    addNotif(activeUser || 'Guest', "Pesanan anda telah dibuat", `Nomor pesanan anda #${inv}, klik untuk melihat transaksi.`, inv);
 
-    let msg = `*NEW ORDER ${inv}*\n\nGame: ${game}\nID: ${tgt}\nItem: ${item}\nPayment: ${pay}\nTotal: Rp ${t.toLocaleString('id-ID')}\n\nSegera proses ngab!`;
+    // Ke Whatsapp Admin
+    let msg = `*NEW ORDER ${inv}*\n\nGame: ${game}\nID: ${tgt}\nItem: ${item}\nPayment: ${pay}\nTotal: Rp ${t.toLocaleString('id-ID')}\n\nProses wok!`;
     window.open("https://wa.me/6287819661875?text=" + encodeURIComponent(msg));
     
-    closeModal('order-modal');
-    muatRiwayat();
-    document.getElementById('target').value = '';
+    closeModal('order-modal'); muatRiwayat(); document.getElementById('target').value = ''; hitung(); 
     
-    // Pesan AI disesuaikan dengan metode pembayaran
     setTimeout(() => {
         let aiResp = `Pesanan kamu dengan Invoice *${inv}* untuk *${item} ${game}* telah masuk antrean. Tunggu diproses ya Kak!`;
-        if (pay === 'SALDO AKUN') {
-            aiResp = `Pesanan kamu dengan Invoice *${inv}* untuk *${item} ${game}* telah masuk antrean. Saldo otomatis dipotong Rp ${t.toLocaleString('id-ID')}. Tunggu diproses ya Kak!`;
-        }
+        if (pay === 'SALDO AKUN') aiResp = `Pesanan kamu dengan Invoice *${inv}* untuk *${item} ${game}* telah masuk antrean. Saldo otomatis dipotong Rp ${t.toLocaleString('id-ID')}. Tunggu diproses ya Kak!`;
         addChat(aiResp, 'bot');
         if(document.getElementById('chat-box').style.display !== 'flex') toggleChat();
-    }, 2000);
-  }
-
-// --- KALKULATOR WR ---
-function hitungWR() {
-    let tMatch = parseFloat(document.getElementById("calc-match").value);
-    let tWr = parseFloat(document.getElementById("calc-wr-now").value);
-    let wrReq = parseFloat(document.getElementById("calc-wr-target").value);
-    let resultBox = document.getElementById("calc-result");
-    
-    if (isNaN(tMatch) || isNaN(tWr) || isNaN(wrReq)) {
-        resultBox.style.display = 'block'; resultBox.style.color = '#ef4444'; resultBox.style.borderColor = '#ef4444';
-        resultBox.innerHTML = "❌ Harap isi semua kolom dengan angka yang benar!"; return;
-    }
-    
-    if(wrReq >= 100 || wrReq <= tWr) {
-        resultBox.style.display = 'block'; resultBox.style.color = '#ef4444'; resultBox.style.borderColor = '#ef4444';
-        resultBox.innerHTML = "❌ Target WR harus kurang dari 100% dan lebih besar dari WR saat ini!"; return;
-    }
-
-    let tWin = tMatch * (tWr / 100);
-    let minMatch = Math.ceil((100 * tWin - tMatch * wrReq) / (wrReq - 100));
-
-    resultBox.style.display = 'block'; resultBox.style.color = '#10b981'; resultBox.style.borderColor = '#10b981';
-    resultBox.innerHTML = `Kamu butuh sekitar <b style="font-size:16px;">${minMatch}</b> win beruntun tanpa kalah untuk mencapai WR ${wrReq}% ⚡`;
-}
-
-// --- GACHA SYSTEM ---
-function putarGacha() {
-    let activeUser = localStorage.getItem('mf_logged_in') || 'Guest';
-    let lastSpinDate = localStorage.getItem(`mf_last_spin_${activeUser}`);
-    let today = new Date().toDateString();
-    let resBox = document.getElementById("gacha-result");
-    
-    if (lastSpinDate === today) {
-        resBox.style.display = 'block'; resBox.style.color = '#ef4444'; resBox.style.borderColor = '#ef4444';
-        resBox.innerHTML = "❌ Kakak sudah gacha hari ini. Coba lagi besok!"; return;
-    }
-
-    let btn = document.getElementById("btn-gacha");
-    btn.innerHTML = "<i class='fas fa-sync-alt fa-spin'></i> MEMUTAR...";
-    btn.disabled = true; resBox.style.display = 'none';
-
-    setTimeout(() => {
-        let rand = Math.random() * 100;
-        let result;
-
-        if (rand <= 20) {
-            let item = promoPrioritas[Math.floor(Math.random() * promoPrioritas.length)];
-            result = { type: "promo", val: item.code, text: `KODE PROMO PRIORITAS DISKON ${item.disc * 100}%!` };
-        } else if (rand <= 50) {
-            let item = promoPremium[Math.floor(Math.random() * promoPremium.length)];
-            result = { type: "promo", val: item.code, text: `KODE PROMO PREMIUM DISKON ${item.disc * 100}%!` };
-        } else if (rand <= 80) {
-            let item = promoBiasa[Math.floor(Math.random() * promoBiasa.length)];
-            result = { type: "promo", val: item.code, text: `KODE PROMO BIASA DISKON ${item.disc * 100}%!` };
-        } else {
-            result = { type: "zonk", val: "", text: "Zonk : coba lagi besok ya Kak!" };
-        }
         
-        resBox.style.display = 'block';
-        if (result.type === "promo") {
-            resBox.style.color = '#10b981'; resBox.style.borderColor = '#10b981';
-            resBox.innerHTML = `🎉 SELAMAT! Kakak dapat <br><b style="font-size:18px;color:white;background:#10b981;padding:5px 10px;border-radius:8px;margin-top:10px;display:inline-block;box-shadow:0 0 10px rgba(16,185,129,0.5);">${result.val}</b><br><span style="font-size:10px;color:white;display:block;margin-top:5px;">(Ketik kode ini di kolom promo saat topup)</span>`;
-        } else {
-            resBox.style.color = '#ef4444'; resBox.style.borderColor = '#ef4444';
-            resBox.innerHTML = `😢 ${result.text}`;
-        }
-        
-        localStorage.setItem(`mf_last_spin_${activeUser}`, today);
-        btn.innerHTML = "<i class='fas fa-gift'></i> SPIN BESOK LAGI";
+        // Simulasi trx sukses dlm 10 dtk untuk testing fitur "Selesai" dan SN Generator
+        setTimeout(() => {
+            addNotif(activeUser || 'Guest', "Status transaksi anda", `Produk ${item} ${game} dengan nomor pembayaran ${inv} telah selesai.`, inv);
+        }, 10000); 
+
     }, 2000);
 }
 
-// --- RIWAYAT & CEK PESANAN SYSTEM ---
 function simpanRiwayat(inv, game, item, harga, tgl, pay, tgt) {
+    let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]'); const activeUser = localStorage.getItem('mf_logged_in') || 'Guest';
+    r.unshift({ inv, game, item, harga, tgl, pay, tgt, user: activeUser, timestamp: Date.now(), sn: null }); 
+    if(r.length > 50) r.pop(); localStorage.setItem('mf_riwayat', JSON.stringify(r));
+}
+
+function generateSN() {
+    let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; let sn = '';
+    for(let i=0; i<32; i++) { sn += chars.charAt(Math.floor(Math.random() * chars.length)); if(i===15) sn += '/10000/'; }
+    return sn;
+}
+
+function openDetailTrx(inv) {
     let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]');
-    const activeUser = localStorage.getItem('mf_logged_in') || 'Guest';
-    r.unshift({ inv, game, item, harga, tgl, pay, tgt, user: activeUser, status: 'PROSES' });
-    if(r.length > 50) r.pop();
-    localStorage.setItem('mf_riwayat', JSON.stringify(r));
+    let trx = r.find(x => x.inv === inv);
+    if(!trx) return alert('Data transaksi tidak ditemukan!');
+
+    let now = Date.now();
+    let isSuccess = (now - (trx.timestamp || now)) >= 10000; // Simulasi 10 detik
+    let statusText = isSuccess ? 'SELESAI' : 'PROSES';
+    let statusColor = isSuccess ? '#10b981' : '#f59e0b';
+    let sn = isSuccess ? (trx.sn || generateSN()) : 'Pesanan masih diproses...';
+
+    // Auto-save SN yang sudah digenerate ke Database
+    if(isSuccess && !trx.sn) { trx.sn = sn; localStorage.setItem('mf_riwayat', JSON.stringify(r)); }
+
+    document.getElementById('dt-title').innerText = `${trx.item} ${trx.game}`;
+    document.getElementById('dt-inv').innerText = `#${trx.inv}`;
+    document.getElementById('dt-status').innerHTML = `<span style="background: ${statusColor}20; color: ${statusColor}; padding: 4px 12px; border-radius: 12px; font-size: 10px; font-weight: 800;"><i class="fas fa-circle" style="font-size: 6px; margin-right: 4px; vertical-align: middle;"></i> ${statusText}</span>`;
+    document.getElementById('dt-waktu').innerText = trx.tgl;
+    document.getElementById('dt-tujuan').innerText = trx.tgt;
+    document.getElementById('dt-sn').innerText = sn;
+    document.getElementById('dt-metode').innerText = trx.pay;
+    document.getElementById('dt-harga').innerText = `Rp ${trx.harga.toLocaleString('id-ID')}`;
+    document.getElementById('dt-total').innerText = `Rp ${trx.harga.toLocaleString('id-ID')}`;
+
+    document.getElementById('detail-trx-modal').style.display = 'flex';
 }
 
 function muatRiwayat() {
-    let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]');
-    const activeUser = localStorage.getItem('mf_logged_in');
-    let container = document.getElementById('list-riwayat');
-    let userRiwayat = r.filter(x => x.user === activeUser);
-
-    if (userRiwayat.length === 0) {
-        container.innerHTML = '<div style="text-align: center; opacity: 0.5; font-size: 10px; padding: 10px;">Belum ada pesanan</div>'; return;
-    }
-
-    let h = "";
+    let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]'); const activeUser = localStorage.getItem('mf_logged_in'); let container = document.getElementById('list-riwayat'); let userRiwayat = r.filter(x => x.user === activeUser);
+    if (userRiwayat.length === 0) { container.innerHTML = '<div style="text-align: center; opacity: 0.5; font-size: 10px; padding: 10px;">Belum ada pesanan</div>'; return; }
+    let h = "", now = Date.now();
     userRiwayat.slice(0, 3).forEach(x => {
-        h += `
-        <div class="riwayat-item">
-            <div>
-                <div style="font-size: 10px; color: #94a3b8; font-weight: bold; margin-bottom: 2px;">${x.inv}</div>
-                <div style="font-size: 12px; font-weight: 800; color: white;">${x.item} ${x.game}</div>
-                <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">Target: ${x.tgt}</div>
-            </div>
-            <div style="text-align: right;">
-                <div style="font-size: 11px; font-weight: 800; color: var(--accent);">Rp ${x.harga.toLocaleString('id-ID')}</div>
-                <div class="status-badge"><i class="fas fa-spinner fa-spin"></i> ${x.status}</div>
-            </div>
-        </div>
-        `;
+        let isSuccess = (now - (x.timestamp || now)) >= 10000; 
+        let statusHtml = isSuccess ? `<div class="status-badge" style="color: #10b981; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);"><i class="fas fa-check-circle"></i> BERHASIL</div>` : `<div class="status-badge" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3);"><i class="fas fa-spinner fa-spin"></i> PROSES</div>`;
+        h += `<div class="riwayat-item" onclick="openDetailTrx('${x.inv}')"><div><div style="font-size: 10px; color: #94a3b8; font-weight: bold; margin-bottom: 2px;">${x.inv}</div><div style="font-size: 12px; font-weight: 800; color: white;">${x.item} ${x.game}</div><div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">Target: ${x.tgt}</div></div><div style="text-align: right;"><div style="font-size: 11px; font-weight: 800; color: var(--accent);">Rp ${x.harga.toLocaleString('id-ID')}</div>${statusHtml}</div></div>`;
     });
-    
-    if(userRiwayat.length > 3) {
-        h += `<div style="text-align:center; font-size:10px; color:#94a3b8; margin-top:10px;">+ ${userRiwayat.length - 3} pesanan lainnya</div>`;
-    }
+    if(userRiwayat.length > 3) h += `<div style="text-align:center; font-size:10px; color:#94a3b8; margin-top:10px;">+ ${userRiwayat.length - 3} pesanan lainnya</div>`;
     container.innerHTML = h;
 }
 
 function hapusRiwayat() {
     if(confirm("Yakin ingin menghapus riwayat trx?")){
-        const activeUser = localStorage.getItem('mf_logged_in');
-        let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]');
-        r = r.filter(x => x.user !== activeUser);
-        localStorage.setItem('mf_riwayat', JSON.stringify(r));
-        muatRiwayat();
-        alert('Riwayat berhasil dihapus.');
+        const activeUser = localStorage.getItem('mf_logged_in'); let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]');
+        r = r.filter(x => x.user !== activeUser); localStorage.setItem('mf_riwayat', JSON.stringify(r)); muatRiwayat(); alert('Riwayat berhasil dihapus.');
     }
 }
 
 function cekPesanan() {
-    let input = document.getElementById('input-cek-order').value.trim();
-    let resBox = document.getElementById('hasil-cek-order');
+    let input = document.getElementById('input-cek-order').value.trim(); let resBox = document.getElementById('hasil-cek-order');
     if(!input) { resBox.style.display = 'block'; resBox.innerHTML = "<span style='color:#ef4444'>Masukkan ID atau No HP!</span>"; return; }
-
-    let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]');
-    const activeUser = localStorage.getItem('mf_logged_in');
+    let r = JSON.parse(localStorage.getItem('mf_riwayat') || '[]'); const activeUser = localStorage.getItem('mf_logged_in');
     let found = r.filter(x => (x.inv === input || x.tgt === input) && x.user === activeUser);
 
     if (found.length > 0) {
-        resBox.style.display = 'block';
-        let h = "<b style='color:#22d3ee; display:block; margin-bottom:8px;'>HASIL PENCARIAN:</b>";
+        resBox.style.display = 'block'; let h = "<b style='color:#22d3ee; display:block; margin-bottom:8px;'>HASIL PENCARIAN:</b>"; let now = Date.now();
         found.forEach(x => {
-            h += `
-                <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:8px;">
-                    <div>INV: <span style="color:#22d3ee">${x.inv}</span></div>
-                    <div>Item: ${x.item} ${x.game}</div>
-                    <div>Target: ${x.tgt}</div>
-                    <div>Status: <span style="color:#10b981; font-weight:bold;">${x.status}</span></div>
-                </div>
-            `;
+            let statusText = ((now - (x.timestamp || now)) >= 10000) ? `<span style="color:#10b981; font-weight:bold;"><i class="fas fa-check-circle"></i> BERHASIL</span>` : `<span style="color:#f59e0b; font-weight:bold;"><i class="fas fa-spinner fa-spin"></i> PROSES</span>`;
+            h += `<div onclick="openDetailTrx('${x.inv}')" style="cursor: pointer; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:8px; border: 1px solid rgba(255,255,255,0.05);"><div>INV: <span style="color:#22d3ee">${x.inv}</span></div><div>Item: ${x.item} ${x.game}</div><div>Target: ${x.tgt}</div><div>Status: ${statusText}</div></div>`;
         });
         resBox.innerHTML = h;
-    } else {
-        resBox.style.display = 'block'; 
-        resBox.innerHTML = "<span style='color:#ef4444'>Data pesanan tidak ditemukan.</span>";
-    }
+    } else { resBox.style.display = 'block'; resBox.innerHTML = "<span style='color:#ef4444'>Data pesanan tidak ditemukan.</span>"; }
 }
 
-// --- CHATBOT & TIME SYSTEM ---
-function tTime() {
-    const d = new Date();
-    document.getElementById('header-jam').innerText = d.toLocaleTimeString('id-ID');
-    document.getElementById('header-tgl').innerText = d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' });
-}
-setInterval(tTime, 1000); tTime();
-
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-function toggleChat() { 
-    let b = document.getElementById('chat-box');
-    b.style.display = b.style.display === 'flex' ? 'none' : 'flex';
+function hitungWR() {
+    let tMatch = parseFloat(document.getElementById("calc-match").value), tWr = parseFloat(document.getElementById("calc-wr-now").value), wrReq = parseFloat(document.getElementById("calc-wr-target").value), resultBox = document.getElementById("calc-result");
+    if (isNaN(tMatch) || isNaN(tWr) || isNaN(wrReq)) { resultBox.style.display = 'block'; resultBox.style.color = '#ef4444'; resultBox.style.borderColor = '#ef4444'; resultBox.innerHTML = "❌ Harap isi semua kolom dengan angka yang benar!"; return; }
+    if(wrReq >= 100 || wrReq <= tWr) { resultBox.style.display = 'block'; resultBox.style.color = '#ef4444'; resultBox.style.borderColor = '#ef4444'; resultBox.innerHTML = "❌ Target WR harus kurang dari 100% dan lebih besar dari WR saat ini!"; return; }
+    let tWin = tMatch * (tWr / 100); let minMatch = Math.ceil((100 * tWin - tMatch * wrReq) / (wrReq - 100));
+    resultBox.style.display = 'block'; resultBox.style.color = '#10b981'; resultBox.style.borderColor = '#10b981';
+    resultBox.innerHTML = `Kamu butuh sekitar <b style="font-size:16px;">${minMatch}</b> win beruntun tanpa kalah untuk mencapai WR ${wrReq}% ⚡`;
 }
 
-function injectWelcomeAI(user) {
-    document.getElementById('chat-content').innerHTML = `
-        <div class="chat-msg bot">
-            Halo Kak <b>${user}</b>! Welcome to Fanzxshop 😊<br><br>
-            Ada yang bisa saya bantu? Kk bisa tanya soal produk, cara top up, keluhan transaksi, metode bayar, atau promo diskon loh!
-        </div>`;
-}
-
-function addChat(msg, type) {
-    let box = document.getElementById('chat-content');
-    box.innerHTML += `<div class="chat-msg ${type}">${msg}</div>`;
-    box.scrollTop = box.scrollHeight;
-}
-
-function sendChat() {
-    let input = document.getElementById('chat-in');
-    let box = document.getElementById('chat-content');
-    let msg = input.value.trim();
-    if (!msg) return;
-
-    addChat(msg, 'user');
-    input.value = "";
-
-    let botMsgId = "bot-" + Date.now();
-    box.innerHTML += `<div id="${botMsgId}" class="chat-msg bot"><i class="fas fa-circle-notch fa-spin"></i> Mengetik...</div>`;
-    box.scrollTop = box.scrollHeight;
-
+function putarGacha() {
+    let activeUser = localStorage.getItem('mf_logged_in') || 'Guest'; let lastSpinDate = localStorage.getItem(`mf_last_spin_${activeUser}`); let today = new Date().toDateString(); let resBox = document.getElementById("gacha-result");
+    if (lastSpinDate === today) { resBox.style.display = 'block'; resBox.style.color = '#ef4444'; resBox.style.borderColor = '#ef4444'; resBox.innerHTML = "❌ Kakak sudah gacha hari ini. Coba lagi besok!"; return; }
+    let btn = document.getElementById("btn-gacha"); btn.innerHTML = "<i class='fas fa-sync-alt fa-spin'></i> MEMUTAR..."; btn.disabled = true; resBox.style.display = 'none';
     setTimeout(() => {
-        let reply = getSmartReply(msg.toLowerCase());
-        document.getElementById(botMsgId).innerHTML = reply;
-        box.scrollTop = box.scrollHeight;
+        let rand = Math.random() * 100; let result;
+        if (rand <= 20) { let item = promoPrioritas[Math.floor(Math.random() * promoPrioritas.length)]; result = { type: "promo", val: item.code, text: `KODE PROMO PRIORITAS DISKON ${item.disc * 100}%!` }; } 
+        else if (rand <= 50) { let item = promoPremium[Math.floor(Math.random() * promoPremium.length)]; result = { type: "promo", val: item.code, text: `KODE PROMO PREMIUM DISKON ${item.disc * 100}%!` }; } 
+        else if (rand <= 80) { let item = promoBiasa[Math.floor(Math.random() * promoBiasa.length)]; result = { type: "promo", val: item.code, text: `KODE PROMO BIASA DISKON ${item.disc * 100}%!` }; } 
+        else { result = { type: "zonk", val: "", text: "Zonk : coba lagi besok ya Kak!" }; }
+        
+        resBox.style.display = 'block';
+        if (result.type === "promo") { resBox.style.color = '#10b981'; resBox.style.borderColor = '#10b981'; resBox.innerHTML = `🎉 SELAMAT! Kakak dapat <br><b style="font-size:18px;color:white;background:#10b981;padding:5px 10px;border-radius:8px;margin-top:10px;display:inline-block;box-shadow:0 0 10px rgba(16,185,129,0.5);">${result.val}</b><br><span style="font-size:10px;color:white;display:block;margin-top:5px;">(Ketik kode ini di kolom promo saat topup)</span>`; } 
+        else { resBox.style.color = '#ef4444'; resBox.style.borderColor = '#ef4444'; resBox.innerHTML = `😢 ${result.text}`; }
+        
+        localStorage.setItem(`mf_last_spin_${activeUser}`, today); btn.innerHTML = "<i class='fas fa-gift'></i> SPIN BESOK LAGI";
     }, 2000);
 }
 
+function tTime() {
+    const d = new Date(); document.getElementById('header-jam').innerText = d.toLocaleTimeString('id-ID'); document.getElementById('header-tgl').innerText = d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' });
+} setInterval(tTime, 1000); tTime();
+
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+function toggleChat() { let b = document.getElementById('chat-box'); b.style.display = b.style.display === 'flex' ? 'none' : 'flex'; }
+
+function injectWelcomeAI(user) { document.getElementById('chat-content').innerHTML = `<div class="chat-msg bot">Halo Kak <b>${user}</b>! Welcome to Fanzxshop 😊<br><br>Ada yang bisa saya bantu? Kk bisa tanya soal produk, cara top up, keluhan transaksi, metode bayar, atau promo diskon loh!</div>`; }
+function addChat(msg, type) { let box = document.getElementById('chat-content'); box.innerHTML += `<div class="chat-msg ${type}">${msg}</div>`; box.scrollTop = box.scrollHeight; }
+
+function sendChat() {
+    let input = document.getElementById('chat-in'); let box = document.getElementById('chat-content'); let msg = input.value.trim();
+    if (!msg) return; addChat(msg, 'user'); input.value = ""; let botMsgId = "bot-" + Date.now();
+    box.innerHTML += `<div id="${botMsgId}" class="chat-msg bot"><i class="fas fa-circle-notch fa-spin"></i> Mengetik...</div>`; box.scrollTop = box.scrollHeight;
+    setTimeout(() => { document.getElementById(botMsgId).innerHTML = getSmartReply(msg.toLowerCase()); box.scrollTop = box.scrollHeight; }, 2000);
+}
+
 function getSmartReply(text) {
-    if (/(halo|hai|p|assalamu|selamat|pagi|siang|sore|malam)/i.test(text)) {
-        return "Halo Kak! 👋 Ada yang bisa AI bantu hari ini? Kakak bisa tanya soal cara order, promo, atau kendala transaksi lho.";
-    } 
-    else if (/(top up|cara order|beli|pesan|gimana|cara|order)/i.test(text)) {
-        return "Gampang banget Kak! 🎮<br>1. Pilih kategori di menu atas<br>2. Masukkan ID tujuan/No HP<br>3. Pilih nominal & metode bayar<br>4. Klik 'ORDER SEKARANG' di bawah ya!";
-    } 
-    else if (/(bayar|qris|dana|ovo|gopay|shopee|metode|pembayaran)/i.test(text)) {
-        return "Untuk pembayaran, FANZ CELL menyediakan QRIS, E-WALLET (DANA, GoPay, ShopeePay), Transfer Bank, dan Cash (Uang Pas). Prosesnya dijamin cepat & aman Kak! 💸";
-    } 
-    else if (/(lama|belum masuk|pending|status|cek|masalah|kendala|error)/i.test(text)) {
-        return "Waduh, maaf kalau buat Kakak menunggu ya 🙏. Normalnya pesanan masuk 1-5 menit. Coba cek status di menu 'Cek Pesanan' ya. Kalau masih belum masuk, klik menu 'FAQ & Bantuan' buat chat Admin langsung.";
-    } 
-    else if (/(promo|diskon|gacha|murah|kode)/i.test(text)) {
-        return "Lagi cari potongan harga? Klik menu 'Gacha Promo' & dapat kesempatan 1x sehari buat dapetin kode diskon spesial lho! 🎁";
-    } 
-    else if (/(admin|bantuan|cs|tolong|manusia)/i.test(text)) {
-        return "Untuk keluhan khusus, Kakak bisa langsung ngobrol dg Admin. Buka menu navigasi <b>'FAQ & Bantuan'</b> di halaman utama, lalu klik tombol <b>Hubungi Admin</b> ya Kak.";
-    } 
-    else if (/(makasih|terima kasih|thanks|ok|baik|oke|sip|mantap)/i.test(text)) {
-        return "Sama-sama Kak! Senang bisa membantu. Ditunggu terus ya orderannya di FANZXSHOP! 🥰";
-    } 
-    else {
-        return "Hmm.. maaf Kak, AI belum sepenuhnya mengerti. Boleh coba gunakan kata kunci singkat seperti <b>'Cara order'</b>, <b>'Pembayaran'</b>, <b>'Pesanan lama'</b>, atau <b>'Promo'</b>?";
-    }
+    if (/(halo|hai|p|assalamu|selamat|pagi|siang|sore|malam)/i.test(text)) return "Halo Kak! 👋 Ada yang bisa AI bantu hari ini? Kakak bisa tanya soal cara order, promo, atau kendala transaksi lho.";
+    if (/(top up|cara order|beli|pesan|gimana|cara|order)/i.test(text)) return "Gampang banget Kak! 🎮<br>1. Pilih kategori di menu atas<br>2. Masukkan ID tujuan/No HP<br>3. Pilih nominal & metode bayar<br>4. Klik 'ORDER SEKARANG' di bawah ya!";
+    if (/(bayar|qris|dana|ovo|gopay|shopee|metode|pembayaran)/i.test(text)) return "Untuk pembayaran, FANZ CELL menyediakan QRIS, E-WALLET (DANA, GoPay, ShopeePay), Transfer Bank, dan Cash (Uang Pas). Prosesnya dijamin cepat & aman Kak! 💸";
+    if (/(lama|belum masuk|pending|status|cek|masalah|kendala|error)/i.test(text)) return "Waduh, maaf kalau buat Kakak menunggu ya 🙏. Normalnya pesanan masuk 1-5 menit. Coba cek status di menu 'Cek Pesanan' ya. Kalau masih belum masuk, klik menu 'FAQ & Bantuan' buat chat Admin langsung.";
+    if (/(promo|diskon|gacha|murah|kode)/i.test(text)) return "Lagi cari potongan harga? Klik menu 'Gacha Promo' & dapat kesempatan 1x sehari buat dapetin kode diskon spesial lho! 🎁";
+    if (/(admin|bantuan|cs|tolong|manusia)/i.test(text)) return "Untuk keluhan khusus, Kakak bisa langsung ngobrol dg Admin. Buka menu navigasi <b>'FAQ & Bantuan'</b> di halaman utama, lalu klik tombol <b>Hubungi Admin</b> ya Kak.";
+    if (/(makasih|terima kasih|thanks|ok|baik|oke|sip|mantap)/i.test(text)) return "Sama-sama Kak! Senang bisa membantu. Ditunggu terus ya orderannya di FANZXSHOP! 🥰";
+    return "Hmm.. maaf Kak, AI belum sepenuhnya mengerti. Boleh coba gunakan kata kunci singkat seperti <b>'Cara order'</b>, <b>'Pembayaran'</b>, <b>'Pesanan lama'</b>, atau <b>'Promo'</b>?";
+}
+
+function toggleFaq(el) {
+    const item = el.parentElement; const body = el.nextElementSibling; const icon = el.querySelector('i');
+    document.querySelectorAll('.faq-item').forEach(faq => { if(faq !== item) { faq.classList.remove('active'); faq.querySelector('.faq-body').style.display = 'none'; faq.querySelector('.faq-head i').classList.replace('fa-chevron-up', 'fa-chevron-down'); } });
+    if (body.style.display === 'block') { body.style.display = 'none'; icon.classList.replace('fa-chevron-up', 'fa-chevron-down'); item.classList.remove('active'); } 
+    else { body.style.display = 'block'; icon.classList.replace('fa-chevron-down', 'fa-chevron-up'); item.classList.add('active'); }
+}
+function cariFaq() {
+    let input = document.getElementById('faq-search').value.toLowerCase(); let items = document.querySelectorAll('.faq-item');
+    items.forEach(item => { item.style.display = item.querySelector('.faq-head').innerText.toLowerCase().includes(input) ? "block" : "none"; });
 }
 
 // Initial setup
-checkLogin();
-pilihK('game', document.querySelector('.nav-box.active'));
+checkLogin(); pilihK('game', document.querySelector('.nav-box.active'));
 </script>
 </body>
 </html>
